@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life RPG — Chaos Dragon</title>
+<style>
+:root{--bg:#070b14;--panel:#101827;--panel2:#0c1320;--line:#26344c;--gold:#d9a441;--gold2:#f0c86a;--text:#eef2f7;--muted:#8f9db2;--red:#d94b55;--green:#5cc58a;--blue:#55a9ff;--purple:#a47cff;--cyan:#55d6c2}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#233452 0,#0a101c 38%,#05070d 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input,select{font:inherit}button{border:1px solid #3b4b68;background:#172238;color:#fff;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer;transition:.15s}button:hover:not(:disabled){transform:translateY(-1px);border-color:#7084a7}button.primary{background:linear-gradient(180deg,#c88d37,#8f5d20);border-color:#e1b45e}button.danger{background:#4d1d27;border-color:#873542}button:disabled{opacity:.4;cursor:not-allowed;transform:none}.hidden{display:none!important}.wrap{max-width:1280px;margin:auto;padding:18px 16px 42px}.topbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a3951;padding:8px 2px 14px;gap:12px}.brand{display:flex;align-items:center;gap:12px}.brandMark{width:42px;height:42px;border:1px solid #a87a2f;border-radius:10px;background:linear-gradient(145deg,#263958,#101722);display:grid;place-items:center;font-size:23px}.brand h1{font-family:Georgia,serif;font-size:22px;margin:0}.brand small{display:block;color:#8f9db2;letter-spacing:.12em;font-size:9px}.nav{display:flex;gap:6px;flex-wrap:wrap}.nav button{background:transparent;border-color:transparent;color:#aab5c9;padding:9px 10px}.nav button.active,.nav button:hover{background:#16243a;color:#fff;border-color:#30445f}.roomPill{border:1px solid #40516c;border-radius:9px;padding:8px 10px;color:#cfd7e6;font-size:12px}.home{display:grid;place-items:center;min-height:72vh}.homeCard{max-width:760px;text-align:center;padding:50px 24px}.eyebrow{font-size:11px;letter-spacing:.18em;color:#d5a64d;font-weight:900}.home h2{font-family:Georgia,serif;font-size:clamp(50px,9vw,86px);margin:12px 0 8px}.home p{color:#aab5c9;font-size:18px;line-height:1.55}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px}.panel{background:linear-gradient(180deg,#111b2b,#0b1320);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 16px 40px #0005}.dashboard{display:grid;grid-template-columns:260px minmax(0,1fr) 280px;gap:12px;margin-top:14px}.sidebar,.rightbar{display:flex;flex-direction:column;gap:12px}.playerCard .avatar{width:62px;height:62px;border-radius:50%;border:2px solid #b27a31;background:#172238;display:grid;place-items:center;font-size:28px;margin-bottom:8px}.playerName{font-family:Georgia,serif;font-size:22px}.levelLine{display:flex;justify-content:space-between;color:#aab5c9;font-size:12px}.xpbar,.hpbar,.energybar{height:9px;background:#05080f;border:1px solid #27344b;border-radius:999px;overflow:hidden}.xpbar i{display:block;height:100%;background:linear-gradient(90deg,#d59b39,#f2d078)}.hpbar i{display:block;height:100%;background:linear-gradient(90deg,#7e2635,#dc5360)}.energybar i{display:block;height:100%;background:linear-gradient(90deg,#287eb9,#59c5ff)}.miniStats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.miniStat{padding:9px;background:#0b1320;border:1px solid #202d42;border-radius:9px}.miniStat b{display:block;font-size:18px}.miniStat span{font-size:10px;color:#7f8ca2}.sectionHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.sectionHead h3{font-family:Georgia,serif;margin:0;font-size:20px}.muted{color:var(--muted);font-size:13px}.bossPanel{padding:0;overflow:hidden}.bossArt{position:relative;min-height:430px;background:#05080d}.bossArt img{width:100%;height:430px;object-fit:contain;object-position:center;background:#05080d;display:block;image-rendering:auto;filter:saturate(.96) contrast(1.04) brightness(.86)}.bossOverlay{position:absolute;inset:0;background:linear-gradient(180deg,#03060b99 0,#0000 35%,#03060bd9 100%);pointer-events:none}.bossHud{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:min(700px,92%);text-align:center}.bossName{font-family:Georgia,serif;font-size:25px;text-shadow:0 2px 8px #000}.bossSub{font-size:11px;color:#c6cfdf;letter-spacing:.14em}.bossHpText{font-weight:900;margin:6px}.bossBar{height:18px;background:#090b10;border:1px solid #8a3540;border-radius:99px;overflow:hidden;box-shadow:0 0 0 2px #0006}.bossBar i{display:block;height:100%;background:linear-gradient(90deg,#7b1827,#ec5862,#8e2532);transition:width .4s}.combatLog{position:absolute;right:14px;bottom:70px;width:min(310px,45%);background:#07101bd9;border:1px solid #33455f;border-radius:10px;padding:10px;font-size:11px;line-height:1.45;backdrop-filter:blur(4px)}.combatLog div{padding:4px 0;border-bottom:1px solid #1b2a3d}.combatLog div:last-child{border:0}.turnBanner{padding:10px 12px;background:#171326;border-top:1px solid #3b3157;border-bottom:1px solid #2a394e;text-align:center}.turnBanner b{color:#f0c86a}.bossMove{margin-top:5px;color:#dca9ff;font-size:11px}.playerHpWrap{margin-top:10px}.playerHpText{display:flex;justify-content:space-between;font-size:11px;color:#aab5c9}.playerHpbar{height:8px;background:#05080f;border:1px solid #27344b;border-radius:999px;overflow:hidden}.playerHpbar i{display:block;height:100%;background:linear-gradient(90deg,#26734b,#5cc58a)}.battleActions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;background:#0a101b;border-top:1px solid #2a394e}.battleBtn{min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.battleBtn strong{font-size:13px}.battleBtn span{font-size:10px;color:#9eabc0}.tabs{display:flex;gap:6px;overflow:auto;padding-bottom:6px}.tab{white-space:nowrap;padding:8px 11px;font-size:12px}.tab.active{border-color:#b17c32;background:#2a2112;color:#f2d28b}.questList{display:grid;gap:8px}.quest{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px;border:1px solid #243149;background:#0a121e;border-radius:10px}.quest.done{opacity:.55}.quest h4{margin:0 0 3px;font-size:14px}.questMeta{font-size:11px;color:#8795ab}.questReward{display:flex;align-items:center;gap:6px;color:#e9c56e;font-size:12px}.diff-Easy{color:#6bd29b}.diff-Medium{color:#e9c56e}.diff-Hard{color:#ed737d}.skillGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.skillBranch{border:1px solid #283851;border-radius:11px;padding:10px;background:#0a121e}.skillBranch h4{margin:0 0 8px;font-family:Georgia,serif}.skillNodes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.classBranch .skillNodes{grid-template-columns:repeat(4,1fr)}.skillNode{min-height:72px;padding:8px 5px;text-align:center;border:1px solid #2d3b52;border-radius:9px;background:#111b2b;font-size:10px}.skillNode.unlocked{border-color:#b37f37;background:#241c10}.skillNode.available{border-color:#5ca8df}.skillNode .ico{font-size:20px;display:block;margin-bottom:4px}.skillNode button{padding:5px 6px;font-size:9px;margin-top:5px}.cost{color:#dcb65d}.leader{display:grid;gap:7px}.leaderRow{display:flex;justify-content:space-between;align-items:center;background:#0a121e;border:1px solid #202d42;border-radius:9px;padding:9px}.badge{padding:3px 7px;border-radius:999px;background:#242f44;color:#c5d0e0;font-size:10px}.dailyBonus{padding:9px;background:#191a12;border:1px solid #665026;color:#e9c56e;border-radius:9px;font-size:12px}.formPanel{max-width:520px;margin:40px auto}.formPanel input{width:100%;padding:12px;background:#080e18;border:1px solid #2d3b52;color:#fff;border-radius:9px;margin:7px 0 12px}.rules{line-height:1.55;color:#b5c0d0;font-size:13px}.rules li{margin:6px 0}.toast{position:fixed;right:16px;bottom:16px;max-width:360px;background:#101a2a;border:1px solid #3c506d;border-radius:10px;padding:12px 14px;box-shadow:0 15px 35px #0007;z-index:20}.levelUp{position:fixed;inset:0;background:#02040ab8;display:grid;place-items:center;z-index:30}.levelCard{width:min(420px,92%);text-align:center;padding:28px;border:1px solid #bd8735;background:linear-gradient(180deg,#1b1d2a,#0c121e);border-radius:16px;box-shadow:0 0 70px #d39a3838}.levelNumber{font-family:Georgia,serif;font-size:76px;color:#f0c86a}.levelCard h2{font-family:Georgia,serif}.points{font-size:20px;color:#e5c36c}.result{text-align:center;max-width:700px;margin:60px auto}.filterRow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.small{font-size:11px}.footerNote{color:#65748b;font-size:11px;margin-top:10px}@media(max-width:1000px){.dashboard{grid-template-columns:1fr}.sidebar,.rightbar{display:grid;grid-template-columns:1fr 1fr}.skillGrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.classBranch .skillNodes{grid-template-columns:repeat(2,1fr)}.nav{display:none}.sidebar,.rightbar{display:flex}.bossArt img,.bossArt{height:320px;min-height:320px}.combatLog{width:54%;font-size:10px}.battleActions{grid-template-columns:repeat(2,1fr)}.skillGrid{grid-template-columns:1fr}.quest{grid-template-columns:1fr}.quest button{width:100%}}
+
+.avatar{overflow:hidden;position:relative}.avatar.custom{display:grid;place-items:center;font-size:30px;box-shadow:inset 0 0 0 3px #0003}.avatarGlow{position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,#fff6,transparent 55%);pointer-events:none}.avatarIcon{position:relative;z-index:1;filter:drop-shadow(0 2px 2px #0008)}
+.avatarEdit{width:100%;margin-top:8px;padding:8px;font-size:11px}.avatarModal{position:fixed;inset:0;background:#02040ad9;display:grid;place-items:center;z-index:40;padding:16px}.avatarCard{width:min(560px,96%);max-height:90vh;overflow:auto;background:linear-gradient(180deg,#172238,#0a101a);border:1px solid #9b7031;border-radius:16px;padding:20px;box-shadow:0 25px 80px #0009}.avatarGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0 16px}.avatarChoice{height:58px;padding:0;font-size:28px;background:#0c1524;border:1px solid #2b3b55}.avatarChoice.selected{border-color:#e2b75e;box-shadow:0 0 0 2px #e2b75e44 inset;background:#251d10}.toneGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}.toneChoice{height:38px;padding:0;border-radius:9px;border:2px solid #33445d}.toneChoice.selected{border-color:#f0c86a;box-shadow:0 0 0 2px #f0c86a44}.skillUse{display:block;width:100%;margin-top:6px;padding:6px;font-size:9px;background:#21344d;border-color:#52749b}.skillUse.ready{background:linear-gradient(180deg,#315a75,#1d3850);border-color:#62b9e8}.skillNode .desc{color:#7f8ca2;font-size:9px;line-height:1.3;margin-top:4px}.battleSkillTray{display:flex;gap:7px;overflow:auto;padding:9px 10px;background:#080e17;border-top:1px solid #202d42}.battleSkill{min-width:115px;text-align:left;padding:8px 10px}.battleSkill b{display:block;font-size:11px}.battleSkill span{font-size:9px;color:#9eabc0}.battleSkill.ready{border-color:#7a5ab4;background:#211b35}.noSkills{color:#7f8ca2;font-size:11px;padding:6px}.questBoard{min-height:620px}.questBoard .quest{grid-template-columns:1fr 160px}.battleOnly{min-height:620px}.battleOnly .bossArt,.battleOnly .bossArt img{height:560px}.dragonFallback{position:absolute;inset:0;display:grid;place-items:center;font-size:110px;background:radial-gradient(circle at 50% 45%,#5d1d2d,#080b13 65%)}
+@media(max-width:650px){.avatarGrid,.toneGrid{grid-template-columns:repeat(4,1fr)}.battleSkill{min-width:100px}}
+
+/* === RPG VISUAL PASS v8 === */
+:root{
+  --bg:#080711;--panel:#11101c;--panel2:#0b0a13;--line:#3a3151;
+  --gold:#d8a84e;--gold2:#ffe09a;--gold3:#8c6224;
+  --red:#d84a58;--green:#55c98b;--blue:#5ba9ef;--purple:#9b72e8;--cyan:#54d7d0;
+  --ink:#f5f0e6;--muted:#a59caf;--shadow:#000b;
+}
+body{
+  background:
+    radial-gradient(circle at 50% -15%,#49335e 0,#171126 23%,#090812 58%,#05050a 100%);
+  background-attachment:fixed;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:screen;
+  background-image:radial-gradient(#fff 0.7px,transparent .8px);background-size:19px 19px;
+}
+.wrap{max-width:1380px;padding:20px 18px 48px}
+.topbar{
+  position:relative;border:1px solid #4a3c5f;border-radius:14px;padding:10px 12px 11px;
+  background:linear-gradient(180deg,#171425e8,#0b0a13e8);box-shadow:0 14px 35px #0008,inset 0 1px #ffffff10;
+}
+.topbar:after,.panel:after,.homeCard:after,.formPanel:after,.levelCard:after{
+  content:"";position:absolute;inset:5px;border:1px solid #d6a84d1c;border-radius:10px;pointer-events:none;
+}
+.brandMark{
+  width:48px;height:48px;border:1px solid var(--gold);border-radius:12px;
+  background:radial-gradient(circle at 35% 25%,#6e5734,#2a2032 48%,#11101a 75%);
+  box-shadow:0 0 20px #d8a84e22,inset 0 0 15px #0008;font-size:26px;
+}
+.brand h1,.home h2,.sectionHead h3,.playerName,.bossName,.levelCard h2,.result h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:.025em}
+.brand h1{font-size:24px;color:#fff5d8;text-shadow:0 2px 8px #000}
+.brand small{color:#c4a76b;letter-spacing:.2em}
+.nav{gap:4px}
+.nav button{
+  position:relative;border:1px solid transparent;border-radius:9px;color:#bcb3c7;
+  background:linear-gradient(180deg,#1a1625,#0f0d17);padding:10px 13px;box-shadow:inset 0 1px #fff1;
+}
+.nav button:before{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:1px;background:linear-gradient(90deg,transparent,#d8a84e66,transparent);opacity:0}
+.nav button.active,.nav button:hover{color:#fff1c8;border-color:#7e5a29;background:linear-gradient(180deg,#3a2b18,#1d1510);box-shadow:0 0 16px #d8a84e18,inset 0 1px #fff2}
+.nav button.active:before{opacity:1}
+.roomPill{border-color:#6b5737;background:#18131a;color:#f0d18b;box-shadow:inset 0 1px #fff1}
+.panel,.homeCard,.formPanel,.levelCard{
+  position:relative;background:linear-gradient(180deg,#171422f2,#0d0c15f2 75%,#0a0910f2);
+  border:1px solid #4b3b5c;border-radius:14px;box-shadow:0 18px 50px #0009,inset 0 1px #ffffff0a;
+}
+.panel{padding:17px}
+.sectionHead{padding-bottom:9px;border-bottom:1px solid #3b3048;margin-bottom:12px}
+.sectionHead h3{color:#f3e6c4;text-shadow:0 1px 5px #000}
+.muted{color:#aaa1b1}
+button{
+  position:relative;border:1px solid #66536f;border-radius:9px;
+  background:linear-gradient(180deg,#2a2338 0%,#171322 52%,#100e17 100%);
+  color:#f4eff8;padding:11px 15px;font-weight:900;letter-spacing:.01em;
+  box-shadow:inset 0 1px #ffffff18,0 3px 0 #08070c,0 6px 14px #0005;
+}
+button:after{content:"";position:absolute;inset:2px;border:1px solid #ffffff08;border-radius:7px;pointer-events:none}
+button:hover:not(:disabled){transform:translateY(-2px);border-color:#a78a5a;box-shadow:inset 0 1px #fff2,0 4px 0 #08070c,0 10px 22px #0007,0 0 14px #d8a84e16}
+button:active:not(:disabled){transform:translateY(1px);box-shadow:inset 0 2px 5px #0008,0 1px 0 #08070c}
+button.primary{
+  color:#21170a;border-color:#f0c96b;background:linear-gradient(180deg,#ffe39b,#d49a3b 52%,#8b5b20);
+  text-shadow:0 1px #ffeab3;box-shadow:inset 0 1px #fff9,0 3px 0 #553512,0 7px 18px #0007,0 0 18px #d8a84e22;
+}
+button.primary:hover:not(:disabled){border-color:#fff0b5;box-shadow:inset 0 1px #fff,0 4px 0 #553512,0 10px 24px #0008,0 0 24px #d8a84e44}
+button.danger{background:linear-gradient(180deg,#6a2631,#34131d);border-color:#a54a58;color:#ffe4e4}
+.actions{gap:12px}
+.home{min-height:74vh}
+.homeCard{padding:56px 30px;overflow:hidden}
+.homeCard:before{content:"⚔";position:absolute;top:18px;left:25px;color:#d8a84e44;font-size:30px}.homeCard:after{border-color:#d8a84e18}
+.eyebrow{color:#e2b95f;letter-spacing:.24em;text-shadow:0 0 12px #d8a84e22}
+.home h2{font-size:clamp(54px,9vw,92px);color:#fff4d5;text-shadow:0 4px 0 #3c2634,0 8px 25px #000;line-height:.95}
+.home p{color:#c0b7c5}
+.battleOnly{border-color:#594263}
+.bossPanel{background:#090811;border-color:#705035;box-shadow:0 0 0 1px #d8a84e12,0 20px 60px #000b}
+.bossArt{background:#05050a;min-height:480px}
+.bossArt img{height:560px;object-fit:contain;object-position:center;background:#05080d;filter:saturate(1.02) contrast(1.04) brightness(.86)}
+.bossArt img[data-phase="2"]{filter:saturate(1.18) contrast(1.08) brightness(.78) hue-rotate(-8deg)}
+.bossArt img[data-phase="3"]{filter:saturate(1.28) contrast(1.12) brightness(.68) hue-rotate(-18deg)}
+.bossOverlay{background:linear-gradient(180deg,#03040a99 0,#0000 28%,#05040ad9 100%),radial-gradient(circle at 50% 50%,transparent 35%,#0008 100%)}
+.bossHud{top:18px}
+.bossName{font-size:30px;color:#ffe6ad;text-shadow:0 3px 12px #000,0 0 18px #d8a84e33}
+.bossSub{color:#d0c3b0}
+.bossHpText{color:#fff1d1}
+.bossBar{height:21px;border-color:#a14c4c;box-shadow:0 0 0 2px #0008,0 0 22px #8e253244}
+.bossBar i{background:linear-gradient(90deg,#5e0d19,#bd2637 48%,#ff7b50 100%);box-shadow:inset 0 1px #fff3}
+.combatLog{background:linear-gradient(180deg,#0b0912e8,#06070ce8);border-color:#675373;box-shadow:0 8px 25px #0008}
+.combatLog div{border-color:#31283d}
+.battleActions{background:linear-gradient(180deg,#15101c,#0b0910);border-color:#5a4053;padding:12px}
+.battleBtn{min-height:72px;border-color:#695070;background:linear-gradient(180deg,#2c2036,#15101d);}
+.battleBtn strong{color:#f5e8cb;font-family:Georgia,serif;font-size:14px}.battleBtn span{color:#b7aaba}
+.battleBtn:hover:not(:disabled){border-color:#d2a354;background:linear-gradient(180deg,#47331b,#1d1510);box-shadow:0 0 18px #d8a84e22}
+.battleSkillTray{background:linear-gradient(180deg,#0c0a12,#08070c);border-top:1px solid #4d394f}
+.battleSkill{border-color:#6c517b!important;background:linear-gradient(180deg,#271b33,#120e19)!important;color:#f4e8ff!important}
+.battleSkill.ready{border-color:#b58a4a!important;background:linear-gradient(180deg,#49321a,#21150e)!important;box-shadow:0 0 14px #d8a84e1c}
+.tabs{border-bottom:1px solid #3c3045;padding:0 2px 8px}
+.tab{border-color:#4c3b59;background:linear-gradient(180deg,#201a2b,#100d16);color:#bcb1c5}
+.tab.active{border-color:#d2a454;background:linear-gradient(180deg,#4a341a,#21160d);color:#ffe7aa;box-shadow:0 0 14px #d8a84e18}
+.quest{border-color:#3b3047;background:linear-gradient(90deg,#15111d,#0d0b13);box-shadow:inset 0 1px #fff1}
+.quest:hover{border-color:#75605a;transform:translateX(2px);transition:.15s}
+.quest.done{opacity:.6;background:linear-gradient(90deg,#101817,#0b1011)}
+.questReward{color:#f1cc75}
+.diff-Easy{color:#6fe0a1}.diff-Medium{color:#f1cc75}.diff-Hard{color:#ff7d88}
+.skillGrid{gap:12px}.skillGrid .coreBranch{grid-column:1/-1}.skillGrid .classBranch{min-width:0}.skillBranch{border-color:#453650;background:linear-gradient(180deg,#171221,#0c0a12);box-shadow:inset 0 1px #fff1}
+.skillBranch h4{color:#f1dfb6}
+.skillNode{border-color:#3d3150;background:linear-gradient(180deg,#1b1527,#0d0b13);box-shadow:inset 0 1px #fff1}
+.skillNode.unlocked{border-color:#c2954d;background:linear-gradient(180deg,#3a2916,#171008);box-shadow:0 0 15px #d8a84e18,inset 0 1px #fff2}
+.skillNode.available{border-color:#5d9dcc;box-shadow:0 0 14px #5ba9ef16}
+.skillNode .ico{filter:drop-shadow(0 2px 3px #000)}
+.skillUse.ready{background:linear-gradient(180deg,#62461e,#2a1a0d)!important;border-color:#d3a14d!important;color:#ffe7ad!important}
+.leaderRow,.miniStat,.dailyBonus{border-color:#3d3147;background:linear-gradient(180deg,#17131f,#0c0a11)}
+.badge{background:linear-gradient(180deg,#2b2237,#16111f);border:1px solid #5a4765;color:#d9cde1}
+.xpbar,.hpbar,.energybar{background:#05050a;border-color:#45374f;box-shadow:inset 0 2px 5px #0009}
+.xpbar i{background:linear-gradient(90deg,#8f5a1f,#f0bd54,#fff0a8);box-shadow:0 0 9px #d8a84e55}
+.energybar i{background:linear-gradient(90deg,#275c91,#56c8ff,#b2efff);box-shadow:0 0 9px #55caff44}
+.hpbar i{background:linear-gradient(90deg,#671626,#d84657,#ff8b76)}
+.playerCard .avatar{border-color:#d2a14d;background:radial-gradient(circle,#35263c,#15101c);box-shadow:0 0 16px #d8a84e1c}
+.avatarEdit{background:linear-gradient(180deg,#292037,#14101b)!important;border-color:#6a5273!important}
+.formPanel input{background:#090710;border-color:#51405d;box-shadow:inset 0 2px 6px #0008}.formPanel input:focus{outline:2px solid #d8a84e44;border-color:#d8a84e}
+.toast{background:linear-gradient(180deg,#20192a,#0d0b13);border-color:#765b83;box-shadow:0 16px 40px #000a,0 0 18px #d8a84e16}
+.levelUp{background:#020108d9;backdrop-filter:blur(4px)}
+.levelCard{border-color:#d0a14e;box-shadow:0 0 0 1px #fff1,0 0 70px #d8a84e25,0 30px 80px #000c}
+.levelNumber{color:#ffe29a;text-shadow:0 3px 0 #5c3d19,0 0 24px #d8a84e55}
+.avatarModal{backdrop-filter:blur(6px)}
+.avatarCard{background:linear-gradient(180deg,#211a2b,#0d0a13);border-color:#9d753b;box-shadow:0 0 0 1px #fff1,0 25px 80px #000c}
+.avatarChoice,.toneChoice{background:linear-gradient(180deg,#241c30,#110e18);border-color:#4f3e5d}.avatarChoice.selected,.toneChoice.selected{border-color:#f0c86a;box-shadow:0 0 0 2px #f0c86a33 inset,0 0 12px #d8a84e22}
+.footerNote{color:#75697d}
+@media(max-width:650px){.bossArt img,.bossArt{height:350px;min-height:350px}.homeCard{padding:42px 20px}.nav{display:flex;overflow:auto;max-width:100%}.topbar{flex-wrap:wrap}.brand{min-width:190px}}
+
+
+.classBadge{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #6e542b;background:#20180d;color:#f0cf82;border-radius:999px;font-size:10px;font-weight:900;margin-top:7px}.classBtn{width:100%;margin-top:8px;background:linear-gradient(180deg,#2a3550,#172238);border-color:#7a6338}.classModal,.subclassModal{position:fixed;inset:0;background:#02040ae8;display:grid;place-items:center;z-index:50;padding:16px}.classCard{width:min(900px,96%);max-height:92vh;overflow:auto;background:linear-gradient(180deg,#18243a,#0a101a);border:1px solid #a77a32;border-radius:18px;padding:20px;box-shadow:0 25px 100px #000b}.classGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.classChoice{min-height:180px;text-align:left;padding:14px;background:linear-gradient(180deg,#121d30,#0a121f);border:1px solid #2e405d;border-radius:12px}.classChoice:hover{border-color:#b8863b;box-shadow:0 0 18px #c28d3b22}.classChoice.selected{border-color:#e4b85f;box-shadow:0 0 0 2px #e4b85f44 inset,0 0 22px #d7a14b22;background:linear-gradient(180deg,#2a2113,#111827)}.classIcon{font-size:34px}.classChoice h4{font:20px Georgia,serif;margin:7px 0 4px}.classChoice .role{color:#e4b85f;font-size:10px;letter-spacing:.1em;text-transform:uppercase}.classChoice p{color:#9eabc0;font-size:11px;line-height:1.4}.classChoice .passive{margin-top:8px;color:#c8d1df;font-size:10px}.subclassGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.subclassChoice{text-align:left;padding:16px;background:#0b1422;border:1px solid #2f415d;border-radius:12px}.subclassChoice:hover{border-color:#b8863b}.subclassChoice.selected{border-color:#e4b85f;box-shadow:0 0 0 2px #e4b85f44 inset}.subclassChoice h4{font:21px Georgia,serif;margin:5px 0}.subclassChoice p{color:#aab5c9;font-size:12px;line-height:1.45}.heroPanel{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.heroSummary{padding:14px;border:1px solid #2a3a54;background:#0a121e;border-radius:12px}.heroClassTitle{font:28px Georgia,serif}.heroSub{color:#e4bd66;font-weight:800}.classFeature{padding:10px;margin-top:10px;border-left:3px solid #c08a3b;background:#16150f;color:#c9d2df;font-size:12px}.lobbyClass{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px;border:1px solid #2d405b;background:#0a121e;border-radius:10px;margin-top:8px}.lobbyClass .name{font-family:Georgia,serif;font-size:18px}.subclassLocked{color:#77869b;font-size:10px}@media(max-width:800px){.classGrid{grid-template-columns:1fr 1fr}.heroPanel{grid-template-columns:1fr}}@media(max-width:520px){.classGrid,.subclassGrid{grid-template-columns:1fr}}
+<style>
+.skillTreeTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;margin-bottom:10px;border:1px solid #5a466f;border-radius:12px;background:linear-gradient(135deg,#171226,#0b0b14)}
+.coreBranch{border-color:#80602c;background:linear-gradient(180deg,#17140e,#0b0b12)}
+.classBranch{position:relative}
+.classBranch.branchLocked{opacity:.62}
+.branchLock{margin-top:8px;padding:8px 10px;border:1px dashed #4d405d;border-radius:8px;color:#8f86a0;font-size:10px;background:#080810}
+.skillNode{transition:.16s;position:relative}
+.skillNode.available{box-shadow:0 0 0 1px #8fc8ff33,inset 0 0 18px #4a78a722}
+.skillNode.unlocked{box-shadow:inset 0 0 18px #d6a84e18}
+.classBranch:not(.branchLocked) .skillNode.available{border-color:#c49a52}
+.bossPreview{margin-top:12px;padding:10px;background:#0a121e;border:1px solid #2a3a53;border-radius:12px}.bossPreview img{width:100%;height:150px;object-fit:cover;border-radius:9px;display:block;filter:saturate(.95) contrast(1.05)}.bossPreviewMeta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;align-items:center}.bossPreviewName{font:700 16px Georgia,serif}.bossPreviewStats{font-size:11px;color:#aab5c9}.bossPhaseArt{position:absolute;left:14px;bottom:14px;padding:6px 9px;background:#07101bd9;border:1px solid #40536f;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.08em}.bossPreview p{margin:6px 0 0}.bossOrder{color:#e7c56e;font-size:10px;letter-spacing:.12em;font-weight:900}</style>
+
+<style>
+/* v38 skill tree layout: cards grow naturally instead of overlapping */
+.skillGrid{display:block}
+.skillTreeTitle{margin-bottom:12px}
+.coreBranch,.classBranch{width:100%;margin-bottom:12px}
+.skillNodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+.classBranch .skillNodes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.skillNode{min-height:0;height:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;word-break:normal;overflow-wrap:anywhere}
+.skillNode .ico{flex:0 0 auto}
+.skillNode b{display:block;line-height:1.2;min-height:2.4em}
+.skillNode .desc{color:#9eabc0;line-height:1.35;margin:6px 0 2px;flex:1;width:100%}
+.skillNode button{margin-top:auto;max-width:100%;white-space:normal;line-height:1.2}
+.branchLock{position:relative;z-index:1}
+@media(max-width:1000px){.classBranch .skillNodes,.skillNodes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.classBranch .skillNodes,.skillNodes{grid-template-columns:1fr}.skillTreeTitle{align-items:flex-start}.skillTreeTitle>div{min-width:0}}
+</style></style></head>
+<body>
+<div class="wrap">
+<header class="topbar"><div class="brand"><div class="brandMark">⚔️</div><div><h1>Life RPG</h1><small>REAL TASKS • EPIC PROGRESS</small></div></div><nav class="nav"><button data-view="game" class="active">⚔ Battle</button><button data-view="quests">📜 Quests</button><button data-view="skills">🌳 Skills</button><button data-view="hero">🧙 Hero</button><button data-view="party">👥 Party</button></nav><div style="display:flex;gap:7px;align-items:center"><span id="roomPill" class="roomPill">🌐 Online • No room</span><button id="leaveBtn">Leave</button></div></header>
+<section id="home" class="home"><div class="homeCard"><div class="eyebrow">A MULTIPLAYER REAL-LIFE RPG</div><h2>Life RPG</h2><p>Complete useful daily quests, earn XP, unlock combat skills, and work together to defeat the Chaos Dragon.</p><div class="actions"><button id="createBtn" class="primary">Create Game</button><button id="joinBtn">Join Game</button></div><div id="homeForm" class="panel formPanel hidden"></div><div class="footerNote">Best with a friend. Each player can use a separate device.</div></div></section>
+<section id="lobby" class="hidden"><div class="panel formPanel"><div class="eyebrow">ADVENTURE PARTY</div><h2 style="font-family:Georgia,serif">Ready Room</h2><div id="roomCode" style="font:800 34px Georgia;color:#e7c56e;letter-spacing:.16em;margin:10px 0"></div><input id="shareLink" readonly><div style="margin-top:12px"><label class="small">BOSS — CAMPAIGN ORDER</label><select id="bossSelect" style="width:100%;padding:10px;background:#080e18;border:1px solid #2d3b52;color:#fff;border-radius:9px;margin-top:5px"></select><div id="bossPreview" class="bossPreview"><img id="bossPreviewImage" src="assets/bosses/chaos-hero.png" alt="Boss preview"><div class="bossPreviewMeta"><div><div id="bossPreviewOrder" class="bossOrder">BOSS 1 / 10</div><div id="bossPreviewName" class="bossPreviewName">THE CHAOS DRAGON</div></div><div id="bossPreviewStats" class="bossPreviewStats">2,000 HP • 150 XP • 25⚡</div></div><p id="bossPreviewDesc" class="muted">The beginning of your journey.</p></div></div><div class="actions" style="justify-content:flex-start"><button id="copyBtn">Copy Join Link</button><button id="startBtn" class="primary">Start Battle</button></div><div id="lobbyPlayers" style="margin-top:16px"></div><div id="lobbyClassArea"></div><p id="lobbyStatus" class="muted"></p><details class="rules"><summary>Rules</summary><ol><li>Each player receives 12 daily quests: 4 Easy, 5 Medium, 3 Hard.</li><li>Completing a quest grants XP and combat energy; during battle, completing a quest uses your turn and does not damage the boss.</li><li>Spend energy on unlocked skills to attack the Chaos Dragon. Unlocked skills appear below the battle buttons and have a Use button in the Skill Tree.</li><li>Leveling follows a Minecraft-inspired cumulative XP curve, scaled 25% harder.</li><li>Every level grants skill points; higher levels grant more. Energy carries between normal levels and fully restores only at major milestones (Levels 5, 10, 15, 20, etc.).</li><li>Choose a class in the lobby. Reach Level 5 to choose a subclass; class features change combat.</li><li>Combat is turn-based: each living player gets one action, then the boss takes a turn.</li><li>Bosses have unique attacks and abilities. Reduce the boss to 0 HP before the party is defeated.</li><li>Bosses are ordered as a campaign from easiest to hardest. After victory, the host can advance the whole party to the next boss without leaving the room.</li><li>Defeating a boss awards every player XP and energy. Harder bosses give larger rewards.</li><li>The party wins when the boss reaches 0 HP.</li></ol></details></div></section>
+<section id="app" class="hidden">
+<div class="dashboard">
+<aside class="sidebar">
+<div class="panel playerCard"><div class="avatar custom" id="playerAvatar"><span class="avatarIcon">🧙</span><span class="avatarGlow"></span></div><button class="avatarEdit" id="editAvatar">🎨 Customize Avatar</button><div class="playerName" id="playerName">Player</div><div class="muted" id="playerLevel">Level 1</div><div id="classBadge" class="classBadge">🛡️ Vanguard</div><button id="changeClass" class="classBtn">⚔️ Change Class</button><div class="levelLine"><span id="xpText">0 XP</span><span id="xpNext">Next: 9</span></div><div class="xpbar"><i id="xpBar"></i></div><div class="miniStats"><div class="miniStat"><span>ENERGY</span><b id="energy">0</b></div><div class="miniStat"><span>SKILL PTS</span><b id="skillPoints">0</b></div><div class="miniStat"><span>DEFENSE</span><b id="defense">0%</b></div><div class="miniStat"><span>SHIELD</span><b id="shield">0</b></div></div><div style="margin-top:12px"><div class="levelLine"><span>Combat Energy</span><span id="energyMax">0 max</span></div><div class="energybar"><i id="energyBar"></i></div><div class="playerHpWrap"><div class="playerHpText"><span>HP</span><span id="playerHp">105 / 105 HP</span></div><div class="playerHpbar"><i id="playerHpBar"></i></div></div></div></div>
+<div class="panel"><div class="sectionHead"><h3>Attributes</h3></div><div id="attributes"></div></div>
+<div class="panel"><div class="sectionHead"><h3>Daily Bonus</h3></div><div class="dailyBonus" id="dailyBonus">Complete quests to unlock bonuses.</div></div>
+</aside>
+<main>
+<div id="viewGame">
+<div class="panel bossPanel battleOnly"><div class="bossArt"><img id="bossImage" src="assets/bosses/chaos-phase1.png" alt="Boss battle artwork"><div id="dragonFallback" class="dragonFallback hidden" aria-hidden="true">🐉</div><div class="bossOverlay"></div><div id="bossPhaseArt" class="bossPhaseArt">PHASE I • AWAKENING</div><div class="bossHud"><div class="bossName" id="bossName">THE CHAOS DRAGON</div><div class="bossSub" id="bossSub">ANCIENT • WORLD BOSS • PARTY ENCOUNTER</div><div class="bossHpText" id="bossHp">2,000 / 2,000 HP</div><div class="bossBar"><i id="bossBar"></i></div></div><div class="combatLog" id="combatLog"></div></div><div class="turnBanner"><b id="bossPartyTurn">Your turn</b><div class="bossMove" id="bossMove"></div></div><div class="battleActions"><button class="battleBtn" id="basicAttack"><strong>⚔️ Strike</strong><span>8 energy • 35 dmg</span></button><button class="battleBtn" id="skillAttack"><strong>🔥 Skill Menu</strong><span>View unlocked skills</span></button><button class="battleBtn" id="defendBtn"><strong>🛡 Guard</strong><span>Restore 8 energy</span></button><button class="battleBtn" id="focusBtn"><strong>✨ Focus</strong><span>+20 energy • 1×/turn</span></button><button class="battleBtn" id="skipBtn"><strong>⏭️ Skip Turn</strong><span>0 energy • pass</span></button><button class="battleBtn" id="classAbilityBtn"><strong>✨ Class Ability</strong><span>Role action</span></button></div><div class="battleSkillTray" id="battleSkillTray"></div></div>
+</div>
+<div id="viewSkills" class="panel hidden"><div class="sectionHead"><h3>Skill Tree</h3><span class="badge" id="skillPointHeader">0 points</span></div><p class="muted">Build a deep class specialization. Every class now has 6 core skills plus 7 skills in each subclass path. Your real-life quest mastery also powers the categories of skills you use.</p><div class="skillGrid" id="skillTree"></div></div>
+<div id="viewQuests" class="panel hidden questBoard">
+  <div class="sectionHead"><div><h3>Quest Board</h3><span class="muted">Complete quests here to earn XP and Combat Energy.</span></div><span class="badge" id="questCount">0 / 12 complete</span></div>
+  <div class="panel questBoardIntro" style="padding:12px;margin-bottom:12px;background:#0a121e">
+    <div class="sectionHead"><b>Daily Progress</b><span class="muted" id="questBoardHint">Finish 4, 8, and 12 quests for milestone bonuses.</span></div>
+    <div class="xpbar" style="height:12px"><i id="questProgressBar"></i></div>
+  </div>
+  <div class="filterRow" id="categoryFilters"></div>
+  <div class="filterRow" id="difficultyFilters"></div>
+  <div class="questList" id="questList"></div>
+</div>
+<div id="viewHero" class="panel hidden"><div class="sectionHead"><h3>Hero Class</h3><button id="heroChangeClass" class="classBtn" style="width:auto;margin:0">⚔️ Change Class</button></div><div class="heroPanel"><div class="heroSummary"><div id="heroClassIcon" style="font-size:52px">🛡️</div><div id="heroClassTitle" class="heroClassTitle">Vanguard</div><div id="heroClassRole" class="muted">Frontline</div><p id="heroClassDesc" class="muted"></p><div class="classFeature"><b>Class Feature</b><div id="heroPassive"></div></div></div><div class="heroSummary"><div class="eyebrow">SUBCLASS PATH</div><div id="heroSubclassTitle" class="heroSub" style="font-size:24px;margin-top:5px">Choose at Level 5</div><p id="heroSubclassDesc" class="muted">Reach level 5 to specialize your class.</p><button id="heroChooseSubclass" class="primary" style="width:100%;margin-top:10px">Choose Subclass</button><div class="classFeature"><b>How classes work</b><div class="muted" style="margin-top:5px">Your class changes combat rules. Your subclass adds a stronger identity at level 5. Class and subclass bonuses stack with your skill tree.</div></div></div></div></div>
+<div id="viewParty" class="panel hidden"><div class="sectionHead"><h3>Party</h3><span class="muted">Work together to defeat the boss</span></div><div class="leader" id="leaderboard"></div></div>
+</main>
+<aside class="rightbar">
+<div class="panel"><div class="sectionHead"><h3>Boss Intel</h3></div><p class="muted">Bosses change tactics as their HP falls. At 50% HP they enter Phase II; below one-third HP they enter Phase III with new attacks and increased damage.</p><div class="miniStat"><span>PHASE</span><b id="bossPhase">I</b></div><div class="miniStat" style="margin-top:7px"><span>PARTY DAMAGE</span><b id="partyDamage">0</b></div></div>
+<div class="panel"><div class="sectionHead"><h3>Next Reward</h3></div><div id="nextReward" class="muted">Level up to earn skill points.</div></div>
+</aside>
+</div></section>
+<section id="result" class="hidden"><div class="result panel"><div class="eyebrow">BATTLE COMPLETE</div><h2 id="resultTitle" style="font:48px Georgia;margin:12px 0">Victory</h2><p id="resultText" class="muted"></p><button id="againBtn" class="primary">Next Boss</button></div></section>
+</div>
+<div id="toast" class="toast hidden"></div>
+<div id="classModal" class="classModal hidden" aria-hidden="true"><div class="classCard" role="dialog" aria-modal="true"><div class="sectionHead"><div><div class="eyebrow">CHOOSE YOUR PATH</div><h3 style="font:30px Georgia,serif;margin:5px 0">Select a Class</h3><div class="muted">Click a class, then press Confirm Class.</div></div><button type="button" id="closeClass">✕</button></div><div class="classGrid" id="classChoices"></div><div class="actions" style="justify-content:flex-end"><button type="button" id="cancelClass">Cancel</button><button type="button" id="saveClass" class="primary">Confirm Class</button></div></div></div>
+<div id="subclassModal" class="subclassModal hidden"><div class="classCard" style="max-width:720px"><div class="sectionHead"><div><div class="eyebrow">LEVEL 5 SPECIALIZATION</div><h3 style="font:30px Georgia,serif;margin:5px 0">Choose Your Subclass</h3><div class="muted" id="subclassIntro">Your subclass changes how your class fights.</div></div><button type="button" id="closeSubclass">✕</button></div><div class="subclassGrid" id="subclassChoices"></div><div class="actions" style="justify-content:flex-end"><button type="button" id="cancelSubclass">Cancel</button><button type="button" id="saveSubclass" class="primary">Choose Path</button></div></div></div>
+<div id="avatarModal" class="avatarModal hidden"><div class="avatarCard"><div class="sectionHead"><h3>Customize Avatar</h3><button id="closeAvatar">✕</button></div><p class="muted">Choose the hero icon and color theme other players will see in your party.</p><div class="small">HERO</div><div class="avatarGrid" id="avatarChoices"></div><div class="small">COLOR THEME</div><div class="toneGrid" id="toneChoices"></div><div class="actions" style="justify-content:flex-end"><button id="cancelAvatar">Cancel</button><button id="saveAvatar" class="primary">Save Avatar</button></div></div></div><div id="levelUp" class="levelUp hidden"><div class="levelCard"><div class="eyebrow">LEVEL UP</div><div class="levelNumber" id="levelNumber">2</div><h2>New power unlocked.</h2><p id="levelUpText" class="points"></p><p class="muted">Open the Skill Tree to spend your points.</p><button id="closeLevel" class="primary">Continue</button></div></div>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);const screens=['home','lobby','app','result'];
+let ws=null,isHost=false,myId='',roomCode='',myName='',hostConn=null,connections=new Map(),state=null,view='game',activeCat='All',activeDiff='All';
+const cats=['Cooking','Cleaning','Studying','Health','Productivity'];
+const bosses={
+  chaos:{name:'THE CHAOS DRAGON',subtitle:'ANCIENT • WORLD BOSS • PARTY ENCOUNTER',emoji:'🐉',maxHp:2000,rewardXp:150,rewardEnergy:25,desc:'The beginning of your journey. Master the party system before the real pressure begins.',moves:[
+    {name:'Chaos Claw',icon:'🦴',kind:'damage',damage:28,desc:'A brutal swipe at one hero.'},{name:'Flame Breath',icon:'🔥',kind:'aoe',damage:18,desc:'Burns the entire party.'},{name:'Chaos Roar',icon:'📢',kind:'buff',damage:0,desc:'The dragon grows enraged, increasing its next attack.'}],
+    phase2Moves:[{name:'Inferno Breath',icon:'🌋',kind:'aoe',damage:28,desc:'A superheated blast that scorches the whole party.'},{name:'Reality Tear',icon:'🕳️',kind:'damage',damage:52,desc:'A rift tears through one hero.'}],
+    phase3Moves:[{name:'Cataclysm',icon:'☄️',kind:'aoe',damage:40,desc:'The dragon unleashes a catastrophic blast.'},{name:'Worldbreaker',icon:'💀',kind:'double',damage:30,desc:'Two devastating strikes against one hero.'}]},
+  procrastinator:{name:'THE PROCRASTINATOR',subtitle:'TIME THIEF • WORLD BOSS • PARTY ENCOUNTER',emoji:'🧟',maxHp:2400,rewardXp:225,rewardEnergy:35,desc:'Tomorrow always looks easier. This boss punishes parties that waste too many turns.',moves:[
+    {name:'Delay Tactics',icon:'⏳',kind:'damage',damage:24,desc:'Slows one hero and steals energy.'},{name:'Deadline Slam',icon:'💥',kind:'damage',damage:38,desc:'A crushing blow.'},{name:'Put It Off',icon:'😴',kind:'heal',damage:0,heal:100,desc:'Heals itself instead of attacking.'}],
+    phase2Moves:[{name:'Time Tax',icon:'💸',kind:'drain',damage:22,desc:'Punishes one hero and steals energy.'},{name:'Last Minute Slam',icon:'⏰',kind:'damage',damage:55,desc:'A crushing attack fueled by panic.'}],
+    phase3Moves:[{name:'Never Enough Time',icon:'⌛',kind:'double',damage:30,desc:'Two frantic attacks against one hero.'},{name:'Deadline Reset',icon:'🔄',kind:'heal',damage:0,heal:180,desc:'The procrastinator buys itself more time.'}]},
+  overthinker:{name:'THE OVERTHINKING OVERLORD',subtitle:'MIND EATER • WORLD BOSS • PARTY ENCOUNTER',emoji:'🧠',maxHp:2800,rewardXp:325,rewardEnergy:50,desc:'Every decision becomes a spiral. Stay focused and keep the party moving.',moves:[
+    {name:'Mind Spiral',icon:'🌀',kind:'damage',damage:30,desc:'Deals heavy mental damage.'},{name:'Confusion',icon:'❓',kind:'drain',damage:16,desc:'Hurts one hero and drains energy.'},{name:'Analyze',icon:'🔍',kind:'buff',damage:0,desc:'Studies the party and empowers its next hit.'}],
+    phase2Moves:[{name:'Recursive Spiral',icon:'🌀',kind:'damage',damage:48,desc:'A looping thought strikes one hero repeatedly.'},{name:'Paralyzing Doubt',icon:'🫥',kind:'drain',damage:24,desc:'Deals damage and drains energy.'}],
+    phase3Moves:[{name:'Mental Collapse',icon:'🧠',kind:'aoe',damage:28,desc:'The boss overloads every hero with thoughts.'},{name:'Perfect Analysis',icon:'📐',kind:'buff',damage:0,desc:'Its next attack becomes massively empowered.'}]},
+  deadline:{name:'THE DEADLINE DEMON',subtitle:'TIME PRESSURE • WORLD BOSS • PARTY ENCOUNTER',emoji:'👹',maxHp:3200,rewardXp:450,rewardEnergy:70,desc:'The clock is always ticking. Survive the pressure and hit hard before time runs out.',moves:[
+    {name:'Clock Strike',icon:'🕰️',kind:'damage',damage:35,desc:'A fast strike against one hero.'},{name:'Panic Wave',icon:'😱',kind:'aoe',damage:15,desc:'Hits every hero.'},{name:'Rush Hour',icon:'⚡',kind:'double',damage:20,desc:'Attacks the same hero twice.'}],
+    phase2Moves:[{name:'Countdown Strike',icon:'🔔',kind:'damage',damage:50,desc:'A heavy hit as the clock races down.'},{name:'Overtime Rush',icon:'🏃',kind:'double',damage:28,desc:'Two rapid strikes against one hero.'}],
+    phase3Moves:[{name:'Final Hour',icon:'🌑',kind:'aoe',damage:30,desc:'The final countdown damages the entire party.'},{name:'Doomsday Clock',icon:'☠️',kind:'damage',damage:65,desc:'A devastating final-hour attack.'}]},
+  jobhunter:{name:'THE REJECTION REAPER',subtitle:'JOB HUNT • CAREER NIGHTMARE • WORLD BOSS',emoji:'📄',maxHp:3600,rewardXp:600,rewardEnergy:90,desc:'Applications, ghosting, interviews, and rejection letters. Keep applying.',moves:[
+    {name:'ATS Scanner',icon:'🤖',kind:'damage',damage:42,desc:'An automated resume scanner targets one hero.'},{name:'Ghosted',icon:'👻',kind:'drain',damage:20,desc:'The reaper ghosts one hero and drains their energy.'},{name:'Awkward Interview',icon:'💼',kind:'aoe',damage:14,desc:'A brutal interview question rattles the entire party.'}],
+    phase2Moves:[{name:'Resume Rejection',icon:'❌',kind:'damage',damage:62,desc:'A rejection letter hits one hero with crushing force.'},{name:'Salary Negotiation',icon:'💰',kind:'buff',damage:0,desc:'The reaper negotiates a stronger next attack.'}],
+    phase3Moves:[{name:'Final Interview',icon:'🎤',kind:'double',damage:42,desc:'Two rapid interview attacks against one hero.'},{name:'Offer Rescinded',icon:'📬',kind:'aoe',damage:38,desc:'A devastating party-wide career setback.'},{name:'Hiring Freeze',icon:'🧊',kind:'buff',damage:0,desc:'The reaper enters a terrifying final phase and empowers itself.'}]},
+  doomscroller:{name:'THE DOOMSCROLLER',subtitle:'ATTENTION THIEF • DIGITAL NIGHTMARE • WORLD BOSS',emoji:'📱',maxHp:4200,rewardXp:700,rewardEnergy:100,desc:'One more video. One more notification. One more hour disappears.',moves:[
+    {name:'Infinite Scroll',icon:'📱',kind:'drain',damage:26,desc:'Drains a hero’s HP and combat energy.'},{name:'Notification Bomb',icon:'🔔',kind:'aoe',damage:18,desc:'A barrage of notifications distracts the entire party.'},{name:'Clickbait Strike',icon:'🪤',kind:'damage',damage:40,desc:'A tempting headline hides a nasty hit.'}],
+    phase2Moves:[{name:'FOMO Surge',icon:'👀',kind:'drain',damage:32,desc:'Fear of missing out drains even more energy.'},{name:'Autoplay',icon:'▶️',kind:'double',damage:28,desc:'The feed refuses to stop and attacks twice.'}],
+    phase3Moves:[{name:'Total Addiction',icon:'♾️',kind:'aoe',damage:36,desc:'The feed overwhelms the entire party.'},{name:'Lost Evening',icon:'🌙',kind:'damage',damage:72,desc:'An entire evening vanishes in one devastating hit.'},{name:'Endless Feed',icon:'🔄',kind:'heal',damage:0,heal:220,desc:'The algorithm refreshes itself and regains strength.'}]},
+  comfort:{name:'THE COMFORT ZONE',subtitle:'STAGNATION • FEAR OF CHANGE • WORLD BOSS',emoji:'🛋️',maxHp:5000,rewardXp:800,rewardEnergy:115,desc:'It is safe here. It is familiar here. It is also where your growth stops.',moves:[
+    {name:'Cozy Trap',icon:'🛋️',kind:'damage',damage:34,desc:'A soft trap catches one hero off guard.'},{name:'Comfort Drain',icon:'😌',kind:'drain',damage:22,desc:'Drains energy by making the easy choice irresistible.'},{name:'Stagnation',icon:'🧊',kind:'buff',damage:0,desc:'The boss settles in and empowers its next attack.'}],
+    phase2Moves:[{name:'Challenge Wall',icon:'🧱',kind:'damage',damage:58,desc:'Fear of a challenge hits one hero hard.'},{name:'Fear of Failure',icon:'😨',kind:'drain',damage:30,desc:'Doubt drains HP and energy.'}],
+    phase3Moves:[{name:'Opportunity Cost',icon:'⏳',kind:'double',damage:38,desc:'Two attacks remind the party what staying still costs.'},{name:'Safe but Stuck',icon:'🔒',kind:'aoe',damage:34,desc:'The whole party feels the cost of never changing.'},{name:'Stay Comfortable',icon:'🛋️',kind:'heal',damage:0,heal:240,desc:'The zone restores itself by convincing the party not to push.'}]},
+  debt:{name:'THE DEBT DRAGON',subtitle:'FINANCIAL PRESSURE • INTEREST MONSTER • WORLD BOSS',emoji:'🐲',maxHp:5800,rewardXp:900,rewardEnergy:130,desc:'The longer the fight lasts, the more interest it collects.',moves:[
+    {name:'Interest Claw',icon:'💰',kind:'damage',damage:45,desc:'A direct hit backed by compounding pressure.'},{name:'Debt Avalanche',icon:'🏦',kind:'aoe',damage:20,desc:'Bills pile onto the entire party.'},{name:'Financial Drain',icon:'💳',kind:'drain',damage:26,desc:'Steals HP and combat energy.'}],
+    phase2Moves:[{name:'Compound Interest',icon:'📈',kind:'damage',damage:68,desc:'The debt grows faster and hits harder.'},{name:'Late Fee',icon:'⏰',kind:'double',damage:27,desc:'Two punishing fees land on one hero.'}],
+    phase3Moves:[{name:'Bankruptcy',icon:'📉',kind:'aoe',damage:46,desc:'A devastating financial collapse hits everyone.'},{name:'Interest Spiral',icon:'🌀',kind:'buff',damage:0,desc:'Interest compounds into an empowered next attack.'},{name:'Collection Notice',icon:'📬',kind:'damage',damage:82,desc:'The final collection attempt hits one hero.'}]},
+  burnout:{name:'THE BURNOUT BEAST',subtitle:'EXHAUSTION • OVERWORK • WORLD BOSS',emoji:'🔥',maxHp:6500,rewardXp:1050,rewardEnergy:150,desc:'It feeds on overwork and gets stronger the longer the party refuses to rest.',moves:[
+    {name:'Overwork',icon:'💼',kind:'damage',damage:46,desc:'One hero is pushed past their limit.'},{name:'Exhaustion Wave',icon:'🥱',kind:'aoe',damage:22,desc:'Fatigue rolls across the whole party.'},{name:'Crash',icon:'💥',kind:'heal',damage:0,heal:120,desc:'The beast feeds on exhaustion and recovers.'}],
+    phase2Moves:[{name:'Overtime',icon:'⏱️',kind:'double',damage:31,desc:'Two brutal shifts hit the same hero.'},{name:'Fatigue Tax',icon:'🧾',kind:'drain',damage:30,desc:'Exhaustion costs HP and energy.'}],
+    phase3Moves:[{name:'Total Burnout',icon:'🔥',kind:'aoe',damage:55,desc:'The beast unleashes a massive exhaustion blast.'},{name:'No Rest',icon:'🚫',kind:'damage',damage:82,desc:'A crushing hit for refusing to slow down.'},{name:'Burnout Spiral',icon:'🌀',kind:'buff',damage:0,desc:'The beast turns accumulated exhaustion into more power.'}]},
+  anxiety:{name:'THE ANXIETY HYDRA',subtitle:'FEAR • WHAT-IFS • WORLD BOSS',emoji:'🐍',maxHp:7500,rewardXp:1250,rewardEnergy:175,desc:'Different fears, same monster. Every head feeds on a different what-if.',moves:[
+    {name:'Multi-Head Strike',icon:'🐍',kind:'double',damage:34,desc:'Two heads strike the same hero from different angles.'},{name:'Fear Spread',icon:'😰',kind:'aoe',damage:24,desc:'Fear spreads through the entire party.'},{name:'Regenerate',icon:'🌿',kind:'heal',damage:0,heal:150,desc:'A wounded head grows back.'}],
+    phase2Moves:[{name:'More Heads',icon:'🐲',kind:'aoe',damage:38,desc:'New fears emerge and attack everyone.'},{name:'What If?',icon:'❓',kind:'buff',damage:0,desc:'The hydra imagines the worst and empowers itself.'}],
+    phase3Moves:[{name:'Worst Case',icon:'☠️',kind:'double',damage:50,desc:'The two deadliest fears attack one hero.'},{name:'No Escape',icon:'🕸️',kind:'drain',damage:34,desc:'Anxiety drains HP and combat energy.'},{name:'Full Hydra',icon:'🐉',kind:'heal',damage:0,heal:260,desc:'Every remaining head surges back to life.'}]}
+};
+const bossIds=['chaos','procrastinator','overthinker','deadline','jobhunter','doomscroller','comfort','debt','burnout','anxiety'];
+function bossArtPath(id,phase=1){return 'assets/bosses/'+id+'-hero-hd.png'}
+function bossHeroPath(id){return 'assets/bosses/'+id+'-hero-hd.png'}
+
+const classes={
+Vanguard:{icon:'🛡️',role:'Tank / Protector',color:'#b87935',desc:'The frontline guardian. Built to survive, protect allies, control the boss, and turn defense into momentum.',passive:'Iron Resolve: +25% max HP, +15% Defense, and Guard/Shield effects are 25% stronger.',ability:{name:'Taunt',icon:'🛡️',cost:10,desc:'Gain 55 shield, force the boss to target you, and reduce its next hit by 35%.'},subclasses:[{id:'warden',name:'Warden',icon:'🏰',desc:'A pure protector who turns the party into a fortress.',feature:'+15% Defense, stronger party shields, and defensive skills protect allies.'},{id:'berserker',name:'Berserker',icon:'🪓',desc:'A bruiser who converts missing HP into defensive pressure and counterattacks.',feature:'Gain counterattack power while wounded; still retains high tank durability.'}]},
+Arcanist:{icon:'🔮',role:'Mage / Resource Controller',color:'#6f5cc7',desc:'A spellcaster who manipulates Energy, empowers allies, and controls the rhythm of the fight rather than simply spamming damage.',passive:'Arcane Flow: combat skills cost 12% less Energy and Focus restores +5 additional Energy.',ability:{name:'Overcharge',icon:'💠',cost:10,desc:'Empower your next class skill. The next skill also refunds 8 Energy after use.'},subclasses:[{id:'pyromancer',name:'Pyromancer',icon:'🔥',desc:'A volatile caster focused on burning the boss and accelerating party tempo.',feature:'Fire skills apply Burn and Pyromancer skills generate bonus Energy.'},{id:'scholar',name:'Scholar',icon:'📚',desc:'A tactical caster who generates Energy, reveals weaknesses, and empowers the party.',feature:'Studying mastery improves Energy generation and support effects.'}]},
+Ranger:{icon:'🏹',role:'DPS / Precision Striker',color:'#4c9b72',desc:'The party’s dedicated damage dealer. Rangers specialize in reliable boss damage, marks, critical hits, and aggressive tempo.',passive:'Hunter’s Rhythm: completing a quest primes your next Ranger skill with +25 effect power; Ranger damage is increased by 12%.',ability:{name:'Mark Prey',icon:'🎯',cost:8,desc:'Mark the boss. Your next Ranger damaging skill deals +40% damage, critically strikes, and restores 4 Energy.'},subclasses:[{id:'beastkeeper',name:'Beastkeeper',icon:'🐺',desc:'A sustained DPS Ranger who fights beside a companion and keeps pressure on the boss.',feature:'Companion attacks deal steady bonus damage and can build a stacking Hunt effect.'},{id:'shadowstalker',name:'Shadowstalker',icon:'🌑',desc:'A burst DPS Ranger who specializes in ambushes, critical strikes, and finishing wounded bosses.',feature:'Higher critical chance, stronger Mark Prey, and bonus damage against low-HP bosses.'}]},
+Tactician:{icon:'⚔️',role:'Buffer / Controller',color:'#c05c58',desc:'The party commander. Manipulates turn tempo, boosts teammates, weakens the boss, and creates openings.',passive:'Prepared Mind: Focus restores +10 Energy and Tactician support effects last for the round.',ability:{name:'Command',icon:'📯',cost:8,desc:'All living allies gain +20% effect power this round and +8 Energy.'},subclasses:[{id:'duelist',name:'Duelist',icon:'🤺',desc:'A tempo specialist who controls single-target pressure and ripostes attacks.',feature:'Counter and tempo skills become stronger; gains extra Defense after a successful Riposte.'},{id:'battlechemist',name:'Battlechemist',icon:'⚗️',desc:'A battlefield alchemist who distributes Energy, shields, and temporary enhancements.',feature:'Quest Energy rewards increase and potion skills affect multiple allies.'}]},
+Mystic:{icon:'✨',role:'Healer / Support',color:'#a56bd1',desc:'The party healer. Restores HP, cleanses pressure, shields allies, and prevents defeat.',passive:'Keen Insight: healing is 15% stronger and quests grant 5% more XP.',ability:{name:'Heal',icon:'💚',cost:10,desc:'Restore 35% of the lowest-health ally’s max HP and give them 20 shield.'},subclasses:[{id:'oracle',name:'Oracle',icon:'🔮',desc:'A predictive support who manipulates fate, Energy, and incoming attacks.',feature:'Foresight grants Evasion and future Energy recovery.'},{id:'luminary',name:'Luminary',icon:'🌟',desc:'A pure healer who creates large shields and emergency recovery.',feature:'Healing and shielding are substantially stronger.'}]},
+Artificer:{icon:'⚙️',role:'Engineer / Utility Support',color:'#7d9aa6',desc:'The party engineer. Builds barriers, deploys machines, restores resources, and controls defensive infrastructure.',passive:'Efficient Systems: the first skill each battle costs 5 less Energy and Artificer shields are 20% stronger.',ability:{name:'Barrier Array',icon:'🛠️',cost:12,desc:'Deploy a party-wide barrier that gives every living ally 25 shield.'},subclasses:[{id:'engineer',name:'Engineer',icon:'🔧',desc:'A gadget specialist who deploys drones and automated support systems.',feature:'Deployables provide repeatable utility and Productivity mastery improves them.'},{id:'curator',name:'Curator',icon:'🧹',desc:'A defensive specialist who restores, reinforces, and organizes the party’s defenses.',feature:'Cleaning mastery improves shields; defensive skills can repair multiple allies.'}]}
+};
+const classList=Object.keys(classes);classList.forEach(id=>classes[id].name=id);
+const subclassById=Object.fromEntries(classList.flatMap(k=>classes[k].subclasses.map(s=>[s.id,{...s,classId:k}])));
+const avatarIcons=['🧙','🧝','🧛','🧟','🧑‍🚀','🧑‍🎤','🥷','🦸','🦹','🧚','🤖','🐲'];
+const avatarTones=['#263b67','#5a315e','#61372b','#275a4b','#6b4f25','#3d4b56'];
+let avatarDraft=null,classDraft=null,subclassDraft=null,subclassPromptedFor=0;
+
+const quests=[
+['Make a simple breakfast','Cooking','Easy',10,5],['Prepare a snack','Cooking','Easy',10,5],['Cook lunch using at least 3 ingredients','Cooking','Medium',25,10],['Plan tomorrow’s dinner and write the ingredients','Cooking','Medium',25,10],['Cook a complete meal from raw ingredients','Cooking','Hard',50,16],['Cook dinner for another person','Cooking','Hard',50,16],['Wipe down your kitchen counters','Cleaning','Easy',10,5],['Put away 10 things that are out of place','Cleaning','Easy',10,5],['Vacuum or sweep one room','Cleaning','Medium',25,10],['Clean and organize one drawer','Cleaning','Medium',25,10],['Deep-clean a room for 30 minutes','Cleaning','Hard',50,16],['Clean out and organize your fridge','Cleaning','Hard',50,16],['Read 10 pages of a book','Studying','Easy',10,5],['Review notes for 15 minutes','Studying','Easy',10,5],['Study for 30 focused minutes','Studying','Medium',25,10],['Complete 10 practice problems','Studying','Medium',25,10],['Make a one-page study guide','Studying','Hard',50,16],['Teach someone a topic you learned','Studying','Hard',50,16],['Take a 15-minute walk','Health','Easy',10,5],['Stretch for 10 minutes','Health','Easy',10,5],['Drink water and prepare tomorrow’s bottle','Health','Medium',25,10],['Do a 20-minute workout','Health','Medium',25,10],['Complete a 40-minute workout or active session','Health','Hard',50,16],['Prepare a balanced meal and clean up afterward','Health','Hard',50,16],['Write tomorrow’s top 3 priorities','Productivity','Easy',10,5],['Clear 10 emails or notifications','Productivity','Easy',10,5],['Finish one important task without multitasking','Productivity','Medium',25,10],['Organize your backpack or workspace','Productivity','Medium',25,10],['Spend 45 minutes on a difficult task','Productivity','Hard',50,16],['Finish a task you have been avoiding','Productivity','Hard',50,16]
+];
+const E=(id,name,icon,cost,energy,cat,desc,effect)=>({id,name,icon,cost,energy,cat,desc,effect});
+const classSkillTrees={
+Vanguard:{core:[
+E('vg_guard','Guard Stance','🛡️',1,8,'Health','Raise your guard. Gain a strong shield and 10% temporary Defense. ',{type:'shield_self',amount:30,defense:10}),
+E('vg_protect','Protect','🤲',1,12,'Health','Protect the lowest-health ally with a reinforced shield.',{type:'shield_lowest',amount:32}),
+E('vg_intercept','Intercept','🧱',2,16,'Cleaning','Step between danger and an ally. Give the lowest-health ally a shield and redirect the next boss hit to you.',{type:'intercept',amount:28}),
+E('vg_rally','Rallying Cry','📯',2,18,'Health','Rally the party. Everyone gains a shield and 6 Energy.',{type:'party_shield_energy',shield:18,energy:6}),
+E('vg_taunt','Iron Challenge','⚔️',3,22,'Productivity','Force the boss to focus you and reduce its next hit by 45%.',{type:'taunt',shield:25}),
+E('vg_laststand','Last Stand','⚜️',4,30,'Health','When wounded, fortify yourself and gain a large shield.',{type:'last_stand',shield:60}),
+],branches:{
+warden:[E('warden_aegis','Aegis Field','🏰',2,18,'Cleaning','Give every ally a protective barrier.',{type:'party_shield',amount:25}),E('warden_fortress','Fortress Wall','🧱',2,20,'Cleaning','Reduce incoming damage for the whole party this round.',{type:'party_defense',amount:15}),E('warden_bodyguard','Bodyguard','🤝',3,22,'Health','Give an ally 20% damage reduction and a shield.',{type:'bodyguard',amount:20,defense:20}),E('warden_reinforce','Reinforce','🔩',3,24,'Cleaning','Repair every ally’s shield and restore 5 Energy.',{type:'party_repair',shield:20,energy:5}),E('warden_sanctuary','Sanctuary','⛨',4,28,'Health','Create a powerful party-wide shield.',{type:'party_shield',amount:45}),E('warden_guardian','Guardian’s Oath','🛡️',4,32,'Productivity','Become the party’s anchor: gain Defense and shield the team.',{type:'guardian_oath',shield:35,defense:20}),E('warden_bulwark','Living Bulwark','🏯',5,38,'Cleaning','Massive party protection. Gain a huge shield and reduce the next boss attack.',{type:'bulwark',shield:55,defense:25})],
+berserker:[E('berserker_blood','Blood Guard','🩸',2,14,'Health','Turn missing HP into a temporary shield.',{type:'blood_guard',shield:45}),E('berserker_roar','War Roar','📣',2,18,'Health','Gain a shield and make the boss less threatening for the party.',{type:'war_roar',shield:25,bossWeak:15}),E('berserker_counter','Counterstance','⚔️',3,20,'Productivity','Prepare a counter. The next boss hit against you triggers a retaliation.',{type:'counter',damage:90}),E('berserker_endure','Endure','🪨',3,22,'Health','Convert low HP into Defense and Energy.',{type:'endure',defense:25,energy:12}),E('berserker_intimidate','Intimidating Presence','👹',4,25,'Productivity','Weaken the boss and protect the party.',{type:'boss_weak_party',bossWeak:20,partyDefense:10}),E('berserker_revenge','Revenge Guard','🔥',4,30,'Health','Gain a large shield; if wounded, gain additional Defense.',{type:'revenge_guard',shield:50,defense:15}),E('berserker_apex','Apex Survivor','🪓',5,38,'Health','Emergency tank stance: huge shield, Defense, and Energy when below half HP.',{type:'apex',shield:75,defense:30,energy:15})]}
+},
+Arcanist:{core:[
+E('arc_focus','Mana Focus','🔮',1,6,'Studying','Recover Energy and prepare your next spell.',{type:'energy_self',amount:18}),E('arc_ward','Mana Ward','🌀',1,10,'Studying','Convert stored mana into a personal shield.',{type:'shield_energy',shield:22,energy:8}),E('arc_empower','Arcane Empowerment','💠',2,14,'Studying','Empower the next class skill used by an ally.',{type:'buff_next',power:25}),E('arc_siphon','Mana Siphon','🔷',2,16,'Studying','Drain the boss’s momentum and restore party Energy.',{type:'party_energy',amount:5,bossWeak:10}),E('arc_control','Spellbind','🧿',3,20,'Studying','Disrupt the boss and reduce its next attack.',{type:'boss_weak',amount:25}),E('arc_overflow','Mana Overflow','🌌',4,24,'Studying','Restore a large amount of Energy to yourself and an ally.',{type:'energy_self_ally',amount:18}),
+],branches:{
+pyromancer:[E('pyro_ignite','Ignite','🔥',2,12,'Cooking','Prime the boss with a burning effect.',{type:'burn',amount:25}),E('pyro_flameguard','Flameguard','🛡️',2,16,'Cooking','Wrap yourself in protective flame.',{type:'shield_self',amount:30}),E('pyro_heatwave','Heatwave','🌡️',3,20,'Cooking','The party gains Energy from the heat.',{type:'party_energy',amount:7}),E('pyro_firewall','Firewall','🔥',3,22,'Cooking','Reduce the next boss attack while shielding the party.',{type:'party_shield',amount:20,bossWeak:10}),E('pyro_combust','Combustion','💥',4,26,'Cooking','Consume your Burn preparation for a strong controlled burst.',{type:'burn_burst',amount:100}),E('pyro_inferno','Inferno Aura','☄️',4,30,'Cooking','Increase party effect power for the round.',{type:'party_buff',power:15}),E('pyro_phoenix','Phoenix Protocol','🦅',5,36,'Cooking','Emergency recovery: restore Energy and a large shield.',{type:'energy_shield',energy:20,shield:50})],
+scholar:[E('scholar_study','Deep Study','📚',2,8,'Studying','Restore Energy from focused knowledge.',{type:'energy_self',amount:22}),E('scholar_weakpoint','Identify Weakness','🔎',2,14,'Studying','Expose the boss and increase the party’s effect power.',{type:'party_buff',power:12,bossWeak:15}),E('scholar_foresight','Foresight','🧠',3,16,'Studying','Predict danger and grant the party temporary Defense.',{type:'party_defense',amount:10}),E('scholar_thesis','Masterwork Thesis','📖',3,20,'Studying','Give yourself and an ally a large Energy refund.',{type:'energy_self_ally',amount:20}),E('scholar_tactics','Calculated Response','🧮',4,22,'Studying','Prepare the next party skill with increased effect power.',{type:'party_buff',power:20}),E('scholar_archive','Arcane Archive','🏛️',4,28,'Studying','Restore Energy to every ally.',{type:'party_energy',amount:10}),E('scholar_omniscience','Omniscience','👁️',5,34,'Studying','Reveal every weakness: party buff, Defense, and Energy.',{type:'omniscience',power:20,defense:15,energy:8})]}
+},
+Ranger:{core:[
+E('rng_mark','Hunter’s Mark','🎯',1,8,'Health','Mark the boss and deal a precision hit.',{type:'ranger_damage',amount:55,mark:20}),E('rng_scout','Keen Shot','🔭',1,10,'Studying','A reliable precision shot that deals bonus damage against the boss.',{type:'ranger_damage',amount:70}),E('rng_cover','Covering Fire','🏹',2,14,'Productivity','Fire a rapid volley that deals heavy damage.',{type:'ranger_damage',amount:105}),E('rng_trap','Snare Trap','🪤',2,16,'Cleaning','Trap the boss and strike the opening for strong damage.',{type:'ranger_damage',amount:115,weak:10}),E('rng_hunters','Hunter’s Rhythm','🐾',3,18,'Health','Deal damage and prime your next Ranger attack for bonus damage.',{type:'ranger_damage',amount:125,prime:30}),E('rng_evasion','Evasive Roll','💨',4,22,'Health','Evade danger while firing a powerful moving shot.',{type:'ranger_damage',amount:145,defense:20}),
+],branches:{
+beastkeeper:[E('beast_companion','Companion Strike','🐺',2,12,'Health','Your companion attacks with you for reliable sustained damage.',{type:'ranger_damage',amount:100,companion:18}),E('beast_howl','Battle Howl','🐺',2,16,'Health','You and your companion unleash a coordinated attack.',{type:'ranger_damage',amount:125,companion:25}),E('beast_guard','Hunting Pack','🦴',3,18,'Health','The pack surrounds the boss and tears into it for repeated pressure.',{type:'ranger_damage',amount:145,companion:30}),E('beast_pack','Pack Tactics','🐾',3,20,'Productivity','Coordinated strikes deal increased damage and prime your next attack.',{type:'ranger_damage',amount:165,prime:25}),E('beast_restore','Loyalty','❤️',4,22,'Health','A companion-assisted assault that also restores a little Energy.',{type:'ranger_damage',amount:185,energy:8,companion:35}),E('beast_alpha','Alpha Bond','👑',4,26,'Health','Command the alpha attack for a devastating sustained-DPS hit.',{type:'ranger_damage',amount:220,companion:45}),E('beast_soul','Spirit of the Wild','🌲',5,32,'Health','Ultimate companion assault: unleash the full pack on the boss.',{type:'ranger_damage',amount:285,companion:60})],
+shadowstalker:[E('shadow_step','Shadowstep','🌑',2,12,'Productivity','Disappear, reposition, and strike from a deadly angle.',{type:'ranger_damage',amount:115,crit:20,defense:20}),E('shadow_smoke','Smoke Veil','💨',2,16,'Cleaning','Attack from concealment with an enhanced critical chance.',{type:'ranger_damage',amount:135,crit:25}),E('shadow_ambush','Ambush Setup','🗡️',3,18,'Studying','A brutal opening strike that marks the boss for your next attack.',{type:'ranger_damage',amount:175,crit:35,mark:25}),E('shadow_vanish','Vanish','🫥',3,20,'Productivity','Vanish and reappear behind the boss with a heavy critical strike.',{type:'ranger_damage',amount:205,crit:40,defense:30}),E('shadow_misdirect','Misdirect','🎭',4,22,'Productivity','Create an opening and punish the boss with a high-damage shot.',{type:'ranger_damage',amount:230,crit:45}),E('shadow_nightveil','Nightveil','🌘',4,28,'Cleaning','Strike from total darkness with a major critical bonus.',{type:'ranger_damage',amount:275,crit:50}),E('shadow_predator','Predator’s Instinct','🦅',5,34,'Studying','Ultimate burst attack. Deals massive bonus damage to a wounded boss.',{type:'ranger_execute',amount:330,crit:60,execute:25})]}
+},
+Tactician:{core:[
+E('tac_plan','Battle Plan','🗺️',1,8,'Productivity','Give the next ally who acts a stronger effect.',{type:'buff_next',power:20}),E('tac_command','Command Link','📡',1,10,'Productivity','Give an ally Energy and a small shield.',{type:'energy_shield_ally',energy:10,shield:15}),E('tac_weaken','Expose Opening','🎯',2,14,'Studying','Weaken the boss for the party.',{type:'boss_weak',amount:20}),E('tac_cover','Tactical Cover','🛡️',2,16,'Productivity','Party gains Defense for the round.',{type:'party_defense',amount:12}),E('tac_rally','Rally Order','📯',3,18,'Health','Restore Energy to every ally.',{type:'party_energy',amount:8}),E('tac_check','Checkmate Setup','♟️',4,24,'Studying','Stack a large party-wide effect-power buff.',{type:'party_buff',power:25}),
+],branches:{
+duelist:[E('duel_riposte','Riposte','🤺',2,12,'Health','Prepare a counterattack and gain Defense.',{type:'counter',damage:80,defense:15}),E('duel_lunge','Lunge','⚔️',2,14,'Productivity','Mark the boss and gain tempo Energy.',{type:'mark',power:15,energy:6}),E('duel_parry','Perfect Parry','🛡️',3,18,'Health','Huge Defense against the next boss hit.',{type:'self_defense',amount:40}),E('duel_disarm','Disarm','⛓️',3,20,'Cleaning','Greatly weaken the boss’s next attack.',{type:'boss_weak',amount:35}),E('duel_counter','Countermaster','🗡️',4,24,'Health','Prepare a stronger retaliation and shield.',{type:'counter',damage:130,defense:15}),E('duel_tempo','Tempo Shift','⏱️',4,28,'Productivity','Party gains Energy and effect power.',{type:'party_energy_buff',energy:8,power:15}),E('duel_grand','Grand Finale','🏆',5,34,'Productivity','Massive tactical preparation: Defense, Energy, and party buff.',{type:'grand_tactics',defense:20,energy:10,power:20})],
+battlechemist:[E('chem_tonic','Battle Tonic','🧪',2,10,'Health','Give the lowest-health ally healing and Energy.',{type:'heal_lowest_energy',heal:15,energy:8}),E('chem_shield','Catalyst Shield','⚗️',2,14,'Cleaning','Create a reactive party shield.',{type:'party_shield',amount:24}),E('chem_mix','Quick Mix','🥤',3,16,'Cooking','Restore Energy to the whole party.',{type:'party_energy',amount:10}),E('chem_bomb','Smoke Bomb','💨',3,18,'Cleaning','Party gains Defense while the boss is disoriented.',{type:'party_defense',amount:20,bossWeak:15}),E('chem_transmute','Transmutation','🔄',4,22,'Cooking','Convert your Energy into a stronger party shield.',{type:'party_shield_energy_trade',shield:40}),E('chem_elixir','Grand Elixir','🍶',4,26,'Health','Heal and shield the entire party.',{type:'party_heal_shield',heal:12,shield:22}),E('chem_lab','Combat Laboratory','🧬',5,32,'Studying','Major party buff plus Energy regeneration.',{type:'lab',power:25,energy:12})]}
+},
+Mystic:{core:[
+E('mys_heal','Healing Glow','💚',1,10,'Health','Heal the lowest-health ally.',{type:'heal_lowest',heal:22}),E('mys_ward','Radiant Ward','🕯️',1,12,'Health','Shield the lowest-health ally.',{type:'shield_lowest',amount:32}),E('mys_cleanse','Cleanse','✨',2,14,'Cleaning','Restore Energy and Defense to an ally.',{type:'cleanse_lowest',energy:8,defense:12}),E('mys_beacon','Beacon of Hope','🌟',2,16,'Health','Party gains a small shield and Energy.',{type:'party_shield_energy',shield:16,energy:5}),E('mys_sanctuary','Sanctuary','⛪',3,20,'Health','Party gains Defense and healing.',{type:'party_heal_defense',heal:10,defense:12}),E('mys_guardian','Guardian Spirit','👼',4,26,'Health','Protect the weakest ally with a major shield.',{type:'guardian_spirit',shield:55}),
+],branches:{
+oracle:[E('ora_foresight','Omen','🔮',2,10,'Studying','Predict the next hit and gain Defense.',{type:'self_defense',amount:30}),E('ora_fate','Fate Twist','🧵',2,14,'Studying','Give an ally Energy and shield.',{type:'energy_shield_lowest',energy:10,shield:25}),E('ora_prophecy','Prophecy','📜',3,18,'Studying','Party gains effect power for the round.',{type:'party_buff',power:18}),E('ora_reversal','Fate Reversal','↩️',3,22,'Studying','Heal the weakest ally and weaken the boss.',{type:'heal_lowest',heal:25,bossWeak:20}),E('ora_destiny','Destiny Break','🌠',4,26,'Studying','Protect the party from the next boss attack.',{type:'party_defense',amount:25}),E('ora_thread','Thread of Fate','🧶',4,30,'Studying','Restore Energy and shields to the whole party.',{type:'party_shield_energy',shield:25,energy:8}),E('ora_destiny2','Oracle’s Destiny','👁️',5,34,'Studying','Major party recovery and Defense.',{type:'party_heal_defense',heal:20,defense:20})],
+luminary:[E('lum_glow','Healing Glow+','🌟',2,10,'Health','Strong single-target heal.',{type:'heal_lowest',heal:35}),E('lum_barrier','Radiant Barrier','☀️',2,14,'Health','Strong shield for the weakest ally.',{type:'shield_lowest',amount:50}),E('lum_light','Shared Light','💡',3,18,'Health','Heal and shield the whole party.',{type:'party_heal_shield',heal:10,shield:20}),E('lum_rebuke','Radiant Rebuke','✨',3,20,'Cleaning','Cleanse the party and weaken the boss.',{type:'party_defense',amount:15,bossWeak:20}),E('lum_dawn','Dawnbringer','🌅',4,24,'Health','Large party heal.',{type:'party_heal',heal:22}),E('lum_seraph','Seraphic Shelter','🪽',4,28,'Health','Massive party barrier.',{type:'party_shield',amount:42}),E('lum_miracle','Miracle','💫',5,34,'Health','Emergency full-party recovery and protection.',{type:'miracle',heal:28,shield:35})]}
+},
+Artificer:{core:[
+E('art_tool','Toolbelt','🔧',1,8,'Cleaning','Restore Energy and gain a small shield.',{type:'energy_shield',energy:12,shield:18}),E('art_barrier','Barrier Array+','🛠️',1,12,'Cleaning','Enhanced party-wide shield generator. Every living ally gains a large barrier.',{type:'party_shield',amount:40}),E('art_repair','Repair Drone','🤖',2,14,'Cleaning','Repair the lowest-health ally and shield them.',{type:'heal_lowest_shield',heal:18,shield:24}),E('art_battery','Power Cell','🔋',2,16,'Productivity','Restore Energy to the whole party.',{type:'party_energy',amount:9}),E('art_turret','Control Turret','🛰️',3,20,'Productivity','Weaken the boss while the turret distracts it.',{type:'boss_weak',amount:22}),E('art_overclock','Overclock Systems','⚙️',4,24,'Productivity','Party gains effect power and Energy.',{type:'party_energy_buff',energy:6,power:18}),
+],branches:{
+engineer:[E('eng_drone','Attack Drone','🤖',2,12,'Productivity','Deploy a drone that weakens the boss and refunds Energy.',{type:'drone',bossWeak:15,energy:8}),E('eng_turret','Arc Turret','🔫',2,16,'Productivity','Deploy a defensive turret that grants party Defense.',{type:'party_defense',amount:15}),E('eng_auto','Auto-Repair','🔩',3,18,'Cleaning','Automatically repair the weakest ally.',{type:'heal_lowest_shield',heal:25,shield:25}),E('eng_battery','Battery Bank','🔋',3,20,'Productivity','Store and distribute Energy.',{type:'party_energy',amount:12}),E('eng_field','Field Generator','⚡',4,24,'Productivity','Party gains a strong shield and Defense.',{type:'party_shield_defense',shield:25,defense:12}),E('eng_megacannon','Megacannon Protocol','💥',4,28,'Productivity','Powerful boss disruption with Energy refund.',{type:'boss_weak_energy',weak:35,energy:10}),E('eng_factory','Mobile Factory','🏭',5,34,'Productivity','Deploy a full support system: shield, Energy, Defense.',{type:'factory',shield:35,energy:10,defense:15})],
+curator:[E('cur_clean','Restoration Kit','🧹',2,10,'Cleaning','Restore the weakest ally and their shield.',{type:'heal_lowest_shield',heal:22,shield:30}),E('cur_sort','Organized Defense','🗂️',2,14,'Cleaning','Reinforce every ally’s Defense.',{type:'party_defense',amount:18}),E('cur_restock','Restock','📦',3,16,'Cleaning','Restore Energy to the party.',{type:'party_energy',amount:11}),E('cur_archive','Archive Shield','📚',3,20,'Cleaning','Store protective resources in a party-wide barrier.',{type:'party_shield',amount:38}),E('cur_restore','Deep Restore','🧽',4,24,'Cleaning','Heal and shield the entire party.',{type:'party_heal_shield',heal:16,shield:28}),E('cur_showcase','Curated Arsenal','🧰',4,28,'Cleaning','Party gains Defense and effect power.',{type:'party_defense_buff',defense:20,power:15}),E('cur_masterpiece','Masterpiece','🏛️',5,34,'Cleaning','Ultimate support system: heal, shield, Energy, and Defense.',{type:'masterpiece',heal:20,shield:40,energy:8,defense:18})]}
+}
+};
+const allSkills=classList.flatMap(cid=>[...(classSkillTrees[cid]?.core||[]),...Object.values(classSkillTrees[cid]?.branches||{}).flat()].map(s=>({...s,classId:cid})));
+const invalidCombatSkills=allSkills.filter(s=>(!s.effect&&!Number.isFinite(Number(s.dmg)))||!Number.isFinite(Number(s.energy))||Number(s.energy)<=0);
+if(invalidCombatSkills.length) console.warn('Invalid combat skill definitions:',invalidCombatSkills.map(s=>s.id));
+function totalXp(level){if(level<=0)return 0;let n=level;let x=n<=16?n*n+6*n:(n<=31?2.5*n*n-40.5*n+360:4.5*n*n-162.5*n+2220);return Math.ceil(x*1.25)}
+function levelForXp(xp){let l=1;while(l<100&&xp>=totalXp(l))l++;return Math.max(1,l)}
+function skillPointsForLevel(l){if(l<=4)return 1;if(l<=8)return 2;if(l<=12)return 3;if(l<=16)return 4;if(l<=20)return 5;return 5+Math.floor((l-20)/5)}
+function cumulativePointsToLevel(l){let p=0;for(let i=2;i<=l;i++)p+=skillPointsForLevel(i);return p}
+function unlockedSkills(player){return player.skills||[]}
+function maxEnergy(player){return 60+player.level*4+(player.stats?.Health||0)*2+(player.stats?.Cooking||0)}
+function baseHpFor(p){const lvl=Number(p.level)||1;const mastery=(p.stats?.Health||0)*5;const bases={Vanguard:150,Arcanist:100,Ranger:110,Tactician:115,Mystic:105,Artificer:120};const growth={Vanguard:12,Arcanist:7,Ranger:8,Tactician:8,Mystic:8,Artificer:9};return (bases[p.classId]||105)+(growth[p.classId]||7)*(lvl-1)+mastery}
+function energyGainTotal(player){return player.quests.filter(q=>q.done).reduce((s,q)=>s+q.energy,0)}
+function makeDaily(seed){let x=seed>>>0;const pick=(arr)=>{x=(x*1664525+1013904223)>>>0;return arr[x%arr.length]};let out=[];for(const c of cats){const pool=quests.filter(q=>q[1]===c);const q=pick(pool.filter(a=>a[2]==='Easy'));out.push({title:q[0],category:q[1],difficulty:q[2],xp:q[3],energy:q[4],done:false,id:out.length})}let remaining=quests.filter(q=>!out.some(o=>o.title===q[0]));while(out.length<12){let q=pick(remaining);if(!out.some(o=>o.title===q[0]))out.push({title:q[0],category:q[1],difficulty:q[2],xp:q[3],energy:q[4],done:false,id:out.length})}return out}
+function initial(){return{started:false,boss:2000,maxBoss:2000,bossId:'chaos',players:[],ended:false,log:[],turnIndex:0,round:1,turnPhase:'player',actedIds:[],bossBuff:1,lastBossMove:'Waiting for the party…',bossRewardClaimed:false}}
+function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2400)}
+function showScreen(name){screens.forEach(s=>$(s).classList.toggle('hidden',s!==name))}
+function sendWs(msg){if(ws&&ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(msg))}
+function sync(){if(isHost)sendWs({type:'state',state})}
+function me(){return state?.players.find(p=>p.id===myId)}
+function defenseFor(p){
+  if(!p)return 0;
+  const base={Vanguard:15,Arcanist:2,Ranger:3,Tactician:4,Mystic:5,Artificer:8}[p.classId]||0;
+  const sub={warden:10,berserker:3,pyromancer:1,scholar:3,beastkeeper:4,shadowstalker:1,duelist:2,battlechemist:4,oracle:3,luminary:5,engineer:4,curator:7}[p.subclassId]||0;
+  const cleaning=Math.floor((Number(p.stats?.Cleaning)||0)/2);
+  return Math.min(70,base+sub+cleaning+(Number(p.tempDefense)||0));
+}
+function incomingDamage(p,raw,applyShield=true){
+  let reduced=Math.max(0,Math.round(Number(raw)||0));
+  const def=defenseFor(p);
+  reduced=Math.max(0,Math.round(reduced*(1-def/100)));
+  if(p.classId==='Vanguard'&&p.taunt)reduced=Math.round(reduced*.65);
+  let blocked=0;
+  if(applyShield){blocked=Math.min(Number(p.guardShield)||0,reduced);p.guardShield=Math.max(0,(Number(p.guardShield)||0)-blocked);}
+  const dealt=Math.max(0,reduced-blocked);
+  p.hp=Math.max(0,p.hp-dealt);
+  return {dealt,blocked,defense:def,reduced};
+}
+function addLog(text){state.log.unshift(text);state.log=state.log.slice(0,6)}
+function ensurePlayer(p){p.level=levelForXp(p.xp);p.energy=Number.isFinite(Number(p.energy))?Number(p.energy):20;p.energy=Math.max(0,Math.min(p.energy,maxEnergy(p)));p.energyMilestone=p.energyMilestone??0;p.skillPoints=p.skillPoints??0;p.skills=Array.isArray(p.skills)?p.skills:[];p.avatar=p.avatar||{icon:'🧙',tone:'#263b67'};p.stats=p.stats||{Cooking:0,Cleaning:0,Studying:0,Health:0,Productivity:0};p.classId=p.classId||null;p.subclassId=p.subclassId||null;/* Keep subclass state valid across reconnects and old saves. */if(p.subclassId&&!subclassById[p.subclassId])p.subclassId=null;if(p.subclassId&&p.classId&&subclassById[p.subclassId].classId!==p.classId)p.subclassId=null;p.classReady=!!p.classId;p.hunterReady=p.hunterReady??false;p.guardBuff=p.guardBuff??false;p.firstSkillReady=p.firstSkillReady??true;p.oracleUsed=p.oracleUsed??false;p.taunt=p.taunt??false;p.overcharge=p.overcharge??false;p.preyMarked=p.preyMarked??false;p.commandRound=p.commandRound??0;p.healUsedRound=p.healUsedRound??0;p.abilityUsedRound=p.abilityUsedRound??0;const desiredMax=baseHpFor(p); if(!p.maxHp||p._hpClass!==p.classId){const ratio=p.maxHp?Math.max(0,Math.min(1,(Number(p.hp)||0)/Number(p.maxHp))):1;p.maxHp=desiredMax;p.hp=Math.round(desiredMax*ratio);p._hpClass=p.classId}else{const oldMax=p.maxHp;p.maxHp=desiredMax;if(p.hp>p.maxHp)p.hp=p.maxHp;} p.hp=Number.isFinite(Number(p.hp))?Math.min(p.maxHp,Number(p.hp)):p.maxHp;p.guardShield=p.guardShield??0}
+function addXp(p,amount){const old=p.level;p.xp+=amount;ensurePlayer(p);if(p.level>old){let milestone=false;for(let l=old+1;l<=p.level;l++){p.skillPoints+=skillPointsForLevel(l);if(l%5===0)milestone=true}if(milestone){p.energy=maxEnergy(p);p.energyMilestone=p.level;addLog('⚡ '+p.name+' reached a major milestone and fully restored energy!')}return p.level-old}return 0}
+function createPlayer(id,name,host,seed){let p={id,name,xp:0,level:1,energy:20,skillPoints:0,skills:[],classId:null,subclassId:null,classReady:false,hunterReady:false,guardBuff:false,firstSkillReady:true,oracleUsed:false,taunt:false,overcharge:false,preyMarked:false,commandRound:0,healUsedRound:0,abilityUsedRound:0,energyMilestone:0,avatar:{icon:avatarIcons[(seed-1)%avatarIcons.length],tone:avatarTones[(seed-1)%avatarTones.length]},stats:{Cooking:0,Cleaning:0,Studying:0,Health:0,Productivity:0},maxHp:105,hp:105,guardShield:0,_hpClass:null,quests:makeDaily(seed)};return p}
+function renderAll(){const p=me();if(!p)return;ensurePlayer(p);$('roomPill').textContent='Room: '+roomCode;$('playerName').textContent=p.name;$('playerLevel').textContent='Level '+p.level;$('classBadge').textContent=p.classId?(classes[p.classId].icon+' '+classes[p.classId].name):'⚔️ Choose Class';if(p.subclassId)$('classBadge').textContent+=' • '+subclassById[p.subclassId].name;$('playerAvatar').style.background=p.avatar.tone;$('playerAvatar').querySelector('.avatarIcon').textContent=p.avatar.icon;$('xpText').textContent=p.xp+' XP';let prev=totalXp(p.level-1),next=totalXp(p.level);$('xpNext').textContent=p.level>=100?'MAX':'Next: '+next;$('xpBar').style.width=(p.level>=100?100:Math.max(0,Math.min(100,(p.xp-prev)/(next-prev)*100)))+'%';$('energy').textContent=p.energy;$('energyMax').textContent=maxEnergy(p)+' max';$('energyBar').style.width=(p.energy/maxEnergy(p)*100)+'%';$('skillPoints').textContent=p.skillPoints;$('defense').textContent=defenseFor(p)+'%';$('shield').textContent=Number(p.guardShield)||0;$('bossHp').textContent=state.boss.toLocaleString()+' / '+state.maxBoss.toLocaleString()+' HP';$('bossBar').style.width=Math.max(0,state.boss/state.maxBoss*100)+'%';const boss=bosses[state.bossId]||bosses.chaos;const phase=Number(state.bossPhase)||1; const phaseLabel=phase===3?'III — FINAL':phase===2?'II — ENRAGED':'I — AWAKENING'; $('bossPhase').textContent=phaseLabel;
+$('bossPartyTurn').textContent=turnText();$('bossName').textContent=boss.name;$('bossSub').textContent=boss.subtitle;$('bossImage').src=bossArtPath(state.bossId,phase);$('bossImage').dataset.phase=phase;$('bossImage').alt=boss.name+' Phase '+phase+' artwork';$('bossPhaseArt').textContent='PHASE '+phase+' • '+(phase===3?'FINAL':phase===2?'ENRAGED':'AWAKENING');$('bossPartyTurn').textContent=turnText();$('bossMove').textContent=state.lastBossMove||'';$('dragonFallback').textContent=boss.emoji;$('playerHp').textContent=p.hp+' / '+p.maxHp+' HP';$('playerHpBar').style.width=Math.max(0,p.hp/p.maxHp*100)+'%';$('partyDamage').textContent=(state.maxBoss-state.boss).toLocaleString();$('combatLog').innerHTML=state.log.map(x=>'<div>'+esc(x)+'</div>').join('');const roleAbility=(classes[p.classId]||classes.Vanguard).ability;
+let roleAbilityDesc=roleAbility.desc;
+if(p.classId==='Artificer'&&roleAbility.name==='Barrier Array'){
+ const barrierShield=25+(p.subclassId==='curator'?10:0);
+ roleAbilityDesc='Deploy a party-wide barrier that gives every living ally '+barrierShield+' shield.';
+}
+if($('classAbilityBtn')){$('classAbilityBtn').innerHTML='<strong>'+roleAbility.icon+' '+roleAbility.name+'</strong><span>'+roleAbility.cost+' energy • '+esc(roleAbilityDesc)+'</span>';}
+const canMove=canAct(p);['basicAttack','defendBtn','focusBtn','skipBtn','skillAttack','classAbilityBtn'].forEach(id=>{if($(id))$(id).disabled=!canMove});document.querySelectorAll('[data-battle-skill]').forEach(b=>b.disabled=!canMove||Number(p.energy)<Number(allSkills.find(s=>s.id===b.dataset.battleSkill)?.energy||0));$('questCount').textContent=p.quests.filter(q=>q.done).length+' / 12';$('dailyBonus').textContent=p.quests.filter(q=>q.done).length>=12?'🏆 Daily Mastery: +100 XP earned!':p.quests.filter(q=>q.done).length>=8?'🔥 8 quests: bonus milestone reached!':p.quests.filter(q=>q.done).length>=4?'⭐ 4 quests: bonus milestone reached!':'Complete 4, 8, and 12 quests for bonus XP.';renderAttributes(p);renderQuestFilters(p);renderSkills(p);renderParty();renderHero(p);maybePromptSubclass(p);updateReward(p)}
+function renderHero(p){const c=classes[p.classId]||classes.Vanguard; $('heroChangeClass').disabled=!!state.started; $('changeClass').disabled=!!state.started; $('changeClass').textContent=state.started?'🔒 Class Locked':'⚔️ Change Class';const sc=p.subclassId&&subclassById[p.subclassId]&&subclassById[p.subclassId].classId===p.classId?subclassById[p.subclassId]:null;$('heroClassIcon').textContent=c.icon;$('heroClassTitle').textContent=c.name;$('heroClassRole').textContent=c.role;$('heroClassDesc').textContent=c.desc;$('heroPassive').textContent=c.passive;if(sc){$('heroSubclassTitle').textContent=sc.icon+' '+sc.name;$('heroSubclassDesc').textContent=sc.desc+' '+sc.feature;$('heroChooseSubclass').textContent='Change Subclass';$('heroChooseSubclass').disabled=false;}else{$('heroSubclassTitle').textContent=p.level>=5?'Choose your subclass':'Locked until Level 5';$('heroSubclassDesc').textContent=p.level>=5?'Choose one of two specialization paths.':'Reach level 5 to specialize your class.';$('heroChooseSubclass').textContent=p.level>=5?'Choose Subclass':'Locked';$('heroChooseSubclass').disabled=p.level<5}}
+function openAvatar(){
+ const p=me(); if(!p)return;
+ avatarDraft={icon:p.avatar?.icon||'🧙',tone:p.avatar?.tone||avatarTones[0]};
+ $('avatarChoices').innerHTML=avatarIcons.map(icon=>`<button type="button" class="avatarChoice ${avatarDraft.icon===icon?'selected':''}" data-avatar-icon="${icon}">${icon}</button>`).join('');
+ $('toneChoices').innerHTML=avatarTones.map(tone=>`<button type="button" class="toneChoice ${avatarDraft.tone===tone?'selected':''}" data-avatar-tone="${tone}" style="background:${tone}"></button>`).join('');
+ $('avatarChoices').querySelectorAll('[data-avatar-icon]').forEach(b=>b.onclick=()=>{avatarDraft.icon=b.dataset.avatarIcon;$('avatarChoices').querySelectorAll('[data-avatar-icon]').forEach(x=>x.classList.toggle('selected',x===b))});
+ $('toneChoices').querySelectorAll('[data-avatar-tone]').forEach(b=>b.onclick=()=>{avatarDraft.tone=b.dataset.avatarTone;$('toneChoices').querySelectorAll('[data-avatar-tone]').forEach(x=>x.classList.toggle('selected',x===b))});
+ $('avatarModal').classList.remove('hidden');
+}
+function closeAvatar(){$('avatarModal').classList.add('hidden')}
+function saveAvatar(){
+ if(!avatarDraft)return;
+ if(!isHost&&ws?.readyState===WebSocket.OPEN){sendWs({type:'avatar',playerId:myId,icon:avatarDraft.icon,tone:avatarDraft.tone});return}
+ else doUpdateAvatar(myId,avatarDraft.icon,avatarDraft.tone);
+ closeAvatar();
+}
+function openClassModal(){
+ const p=me(); if(!p)return;
+ if(state.started){toast('Your class is locked once the game starts.');return}
+ classDraft=p.classId||null;
+ const box=$('classChoices');
+ box.innerHTML=classList.map(id=>{const c=classes[id];return `<div class="classChoice ${classDraft===id?'selected':''}" data-class-choice="${id}" tabindex="0" role="button" aria-pressed="${classDraft===id}"><span class="classIcon">${c.icon}</span><div class="role">${c.role}</div><h4>${c.name}</h4><p>${c.desc}</p><div class="passive"><b>Feature:</b> ${c.passive}</div></div>`}).join('');
+ box.onclick=e=>{const card=e.target.closest('[data-class-choice]');if(!card)return;e.preventDefault();classDraft=card.dataset.classChoice;box.querySelectorAll('[data-class-choice]').forEach(x=>{const on=x===card;x.classList.toggle('selected',on);x.setAttribute('aria-pressed',on?'true':'false')})};
+ box.onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;const card=e.target.closest('[data-class-choice]');if(!card)return;e.preventDefault();card.click()};
+ const modal=$('classModal');modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
+}
+function closeClassModal(){const modal=$('classModal');modal.classList.add('hidden');modal.setAttribute('aria-hidden','true')}
+function setClass(id){
+ if(!classes[id])return;
+ if(state.started){toast('Your class is locked for this game.');closeClassModal();return;}
+ if(!isHost && ws?.readyState===WebSocket.OPEN){sendWs({type:'class',id,playerId:myId});return}
+ doSetClass(myId,id);
+}
+function doSetClass(pid,id){
+ const p=state?.players?.find(x=>x.id===pid);
+ if(!p||!classes[id]||state.started)return;
+ const classChanged=p.classId!==id;
+ p.classId=id;
+ p.classReady=true;
+ if(classChanged) p.subclassId=null;
+ addLog('⚔️ '+p.name+' chose '+classes[id].name+'.');
+ sync();
+ renderLobby();
+}
+function saveClassChoice(){
+ if(state.started){toast('Your class is locked for this game.');closeClassModal();return}
+ const id=classDraft;
+ if(!id||!classes[id]){toast('Click a class first.');return}
+ const p=me(); if(!p){closeClassModal();return}
+ const btn=$('saveClass');
+ if(btn.disabled)return;
+ btn.disabled=true;btn.textContent='Saving…';
+ try{
+   setClass(id);
+   closeClassModal();
+   toast('Class selected: '+classes[id].name);
+ }catch(err){console.error(err);toast('Could not save class. Try again.')}finally{
+   setTimeout(()=>{btn.disabled=false;btn.textContent='Confirm Class'},300);
+ }
+}
+function openSubclassModal(){const p=me();if(!p||p.level<5)return;subclassDraft=p.subclassId||null;const c=classes[p.classId];$('subclassIntro').textContent='Choose how your '+c.name+' specializes. This choice changes combat immediately.';$('subclassChoices').innerHTML=c.subclasses.map(sc=>`<button type="button" class="subclassChoice ${subclassDraft===sc.id?'selected':''}" data-subclass-choice="${sc.id}"><div style="font-size:34px">${sc.icon}</div><h4>${sc.name}</h4><p>${sc.desc}</p><div class="classFeature"><b>Subclass Feature</b><div>${sc.feature}</div></div></button>`).join('');document.querySelectorAll('[data-subclass-choice]').forEach(b=>b.onclick=()=>{subclassDraft=b.dataset.subclassChoice;document.querySelectorAll('[data-subclass-choice]').forEach(x=>x.classList.toggle('selected',x===b))});$('subclassModal').classList.remove('hidden')}
+function closeSubclassModal(){$('subclassModal').classList.add('hidden')}
+function saveSubclassChoice(){if(!subclassDraft){toast('Choose a subclass first.');return}setSubclass(subclassDraft);closeSubclassModal()}
+function setSubclass(id){if(!subclassById[id])return;if(!isHost&&ws?.readyState===WebSocket.OPEN){sendWs({type:'subclass',id,playerId:myId});closeSubclassModal();return}doSetSubclass(myId,id)}
+function doSetSubclass(pid,id){const p=state.players.find(x=>x.id===pid);const sc=subclassById[id];if(!p||!sc||!p.classId||p.level<5)return false;if(sc.classId!==p.classId){toast('That subclass does not belong to your current class.');return false}const changed=p.subclassId!==id;p.subclassId=sc.id;p.classReady=true;subclassPromptedFor=p.level;addLog('🌟 '+p.name+(changed?' specialized as ':' selected ')+sc.name+'!');sync();renderAll();toast((changed?'Subclass selected: ':'Subclass active: ')+sc.name);return true}
+function maybePromptSubclass(p){if(p.level>=5&&!p.subclassId&&subclassPromptedFor!==p.level){subclassPromptedFor=p.level;setTimeout(openSubclassModal,150)}}
+function renderAttributes(p){const purpose={Cooking:'Energy capacity: +1 max Energy per point.',Cleaning:'Defense: +1% Defense per 2 points.',Studying:'Skill mastery: +1% skill power per point.',Health:'Vitality: +5 max HP and +2 max Energy per point.',Productivity:'Damage: +1% direct damage per point.'};$('attributes').innerHTML=cats.map(c=>`<div class="levelLine" style="padding:7px 0"><span><b>${c}</b><small class="muted" style="display:block;font-size:9px">${purpose[c]}</small></span><b>${p.stats[c]}</b></div>`).join('')+`<div class="levelLine" style="padding:7px 0"><span><b>Defense</b><small class="muted" style="display:block;font-size:9px">Reduces incoming boss damage.</small></span><b>${defenseFor(p)}%</b></div><div class="levelLine" style="padding:7px 0"><span><b>Active Shield</b><small class="muted" style="display:block;font-size:9px">Absorbs damage before HP.</small></span><b>${Number(p.guardShield)||0}</b></div>`}
+function renderQuestFilters(p){
+const cb=['All',...cats];
+$('categoryFilters').innerHTML=cb.map(c=>`<button class="tab ${activeCat===c?'active':''}" data-cat="${c}">${c}</button>`).join('');
+$('difficultyFilters').innerHTML=['All','Easy','Medium','Hard'].map(d=>`<button class="tab ${activeDiff===d?'active':''}" data-diff="${d}">${d}</button>`).join('');
+document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{activeCat=b.dataset.cat;renderAll()});
+document.querySelectorAll('[data-diff]').forEach(b=>b.onclick=()=>{activeDiff=b.dataset.diff;renderAll()});
+let qs=p.quests.filter(q=>(activeCat==='All'||q.category===activeCat)&&(activeDiff==='All'||q.difficulty===activeDiff));
+$('questList').innerHTML=qs.map(q=>`<div class="quest ${q.done?'done':''}"><div><h4>${q.done?'✓ ':''}${esc(q.title)}</h4><div class="questMeta">${q.category} • <span class="diff-${q.difficulty}">${q.difficulty}</span></div></div><div><div class="questReward">+${q.xp} XP • +${q.energy} ⚡</div><button class="primary" style="margin-top:7px;width:100%" ${q.done?'disabled':''} data-qid="${q.id}">${q.done?'Completed':(state.started?'Complete Quest • Uses Turn':'Complete Quest')}</button></div></div>`).join('');
+document.querySelectorAll('[data-qid]').forEach(b=>b.onclick=()=>completeQuest(Number(b.dataset.qid)));
+let done=p.quests.filter(q=>q.done).length;
+$('questProgressBar').style.width=(done/p.quests.length*100)+'%';
+$('questBoardHint').textContent=done>=12?'🏆 Daily Mastery complete!':done>=8?'🔥 8 quests complete — final milestone unlocked!':done>=4?'⭐ 4 quests complete — keep going for the 8 and 12 quest bonuses.':'Complete 4, 8, and 12 quests for milestone bonuses.';
+}
+function renderSkills(p){
+const tree=classSkillTrees[p.classId]||classSkillTrees.Vanguard;const c=classes[p.classId]||classes.Vanguard;
+$('skillPointHeader').textContent=p.skillPoints+' points';
+const activeSubclass=p.subclassId&&subclassById[p.subclassId]?.classId===p.classId?p.subclassId:null;
+const nodeHtml=(s,i,arr,branch=false)=>{let u=p.skills.includes(s.id);let prev=arr[i-1];let coreReq=s.requiresCore?tree.core[s.requiresCore-1]:null;/* A subclass branch starts as soon as the subclass is selected. The first branch node may optionally require a core node, but never a hidden previous node. */let prevReq=branch?null:(s.requiresPrev===true?prev:null);let effectiveCoreReq=branch?null:coreReq;let avail=!u&&(!prevReq||p.skills.includes(prevReq.id))&&(!effectiveCoreReq||p.skills.includes(effectiveCoreReq.id))&&(!branch||activeSubclass===branch);let lockedReason=!branch?'':'Choose this subclass to unlock this branch';let preview=skillPreview(p,s);let numberLabel=skillUiLabel(p,s,preview);return `<div class="skillNode ${u?'unlocked':''} ${avail?'available':''}"><span class="ico">${s.icon}</span><b>${s.name}</b><div class="small">${numberLabel} • ${s.energy}⚡</div><div class="desc">${s.desc}</div>${u?`<div class="small" style="color:#6bd29b">✓ Unlocked</div><button class="skillUse ${p.energy>=s.energy?'ready':''}" data-use-skill="${s.id}">⚔ Use in Battle</button>`:avail?`<button data-skill="${s.id}">Unlock <span class="cost">${s.cost} SP</span></button>`:`<div class="small">${lockedReason||'Locked'}</div>`}</div>`};
+let core=tree.core.map((s,i)=>nodeHtml(s,i,tree.core,false)).join('');
+let branches=Object.entries(tree.branches||{}).map(([subId,arr])=>{const sc=subclassById[subId];const locked=activeSubclass!==subId;return `<div class="skillBranch classBranch ${locked?'branchLocked':''}"><h4>${sc.icon} ${sc.name} <span class="muted">${locked?'(locked)': '(specialization)'}</span></h4><div class="skillNodes">${arr.map((s,i)=>nodeHtml(s,i,arr,true)).join('')}</div>${locked?`<div class="branchLock">${activeSubclass?`Your active subclass is ${subclassById[activeSubclass].name}.`:'Reach Level 5 and choose this subclass to unlock this branch.'}</div>`:''}</div>`}).join('');
+const cats=['Cooking','Cleaning','Studying','Health','Productivity']; const mastery=cats.map(cat=>`<div class="miniStat"><span>${cat.toUpperCase()}</span><b>${p.stats?.[cat]||0}</b><div class="small muted">quest mastery</div></div>`).join(''); $('skillTree').innerHTML=`<div class="skillTreeTitle"><div><span style="font-size:24px">${c.icon}</span> <b>${c.name} Skill Tree</b><div class="muted">6 core skills + 7 skills in each specialization. Subclass branches unlock immediately when you choose a subclass — no full core tree required.</div></div><span class="badge">${p.skillPoints} SP</span></div>`+((p.level>=5&&!p.subclassId)?`<div class="panel" style="padding:12px;margin-bottom:10px;border:1px solid #dcb65d"><b>🎯 Subclass unlocked!</b><div class="muted" style="margin-top:4px">Choose your Ranger specialization to unlock its entire branch. You do not need to buy the Ranger core skills first.</div><button type="button" class="primary" style="margin-top:8px" onclick="openSubclassModal()">Choose Subclass</button></div>`:'')+`<div class="panel" style="padding:10px;margin-bottom:10px"><div class="small" style="color:#dcb65d;font-weight:900;margin-bottom:7px">📈 REAL-LIFE MASTERY</div><div class="miniStats">${mastery}</div></div>`+`<div class="skillBranch coreBranch"><h4>⚔️ ${c.name} Core</h4><div class="skillNodes">${core}</div></div>${branches}`;
+document.querySelectorAll('[data-skill]').forEach(b=>b.onclick=()=>unlockSkill(b.dataset.skill));document.querySelectorAll('[data-use-skill]').forEach(b=>b.onclick=()=>doAction(b.dataset.useSkill));renderBattleSkills(p);
+}
+function skillPreview(p,s){
+ let bonus=1+(p.stats?.[s.cat||'Productivity']||0)*.03;
+ if(s.cat==='Studying')bonus*=1+(p.stats?.Studying||0)*.01;
+ if(p.classId==='Arcanist')bonus*=1.1;
+ if(p.classId==='Tactician'&&p.subclassId==='duelist')bonus*=1.05;
+ if(p.classId==='Artificer'&&p.subclassId==='engineer'&&(s.cat||'Productivity')==='Productivity')bonus*=1.3;
+ if(p.classId==='Artificer'&&p.subclassId==='curator'&&(s.cat||'Productivity')==='Cleaning')bonus*=1.3;
+ return Number.isFinite(Number(s.dmg))?Math.max(1,Math.round(Number(s.dmg)*bonus)):0;
+}
+function skillUiLabel(p,s,preview){const e=s.effect||{};const bits=[];const shieldValue=(raw)=>{let n=Number(raw)||0;if(p.classId==='Artificer')n=Math.round(n*1.2);if(p.classId==='Artificer'&&p.subclassId==='curator'&&s.cat==='Cleaning')n=Math.round(n*1.15);return n};if(e.type==='shield_self'||e.type==='shield_energy'||e.type==='energy_shield'||e.type==='last_stand'||e.type==='blood_guard'||e.type==='revenge_guard'||e.type==='apex'||e.type==='counter'||e.type==='self_defense')bits.push((e.shield?shieldValue(e.shield)+' shield':'')+(e.defense?' • '+e.defense+'% DEF':''));else if(e.type==='party_shield'||e.type==='party_shield_energy'||e.type==='party_repair'||e.type==='party_heal_shield'||e.type==='party_shield_defense'||e.type==='factory'||e.type==='masterpiece')bits.push(shieldValue(e.shield||e.amount||0)+' party shield');else if(e.type?.includes('heal')||e.type==='heal_lowest')bits.push((e.heal||e.amount||0)+'% heal');else if(e.type?.includes('energy'))bits.push('+'+(e.energy||e.amount||0)+'⚡');else if(e.type==='party_buff'||e.type==='buff_next'||e.type==='party_energy_buff'||e.type==='party_defense_buff')bits.push('+'+(e.power||e.amount||0)+'% effect');else if(e.type==='boss_weak'||e.type==='boss_weak_energy'||e.type==='burn'||e.type==='mark')bits.push('Boss control');else if(e.type==='taunt'||e.type==='intercept')bits.push('Protect / taunt');if(Number(s.dmg)>0)bits.unshift(preview!==Number(s.dmg)?`${preview} dmg`:`${s.dmg} dmg`);return bits.join(' • ')||'Utility';}
+function renderBattleSkills(p){const tray=$('battleSkillTray');const unlocked=allSkills.filter(s=>s.classId===p.classId&&p.skills.includes(s.id));if(!unlocked.length){tray.innerHTML='<div class="noSkills">🔒 Unlock a class skill to place combat abilities here.</div>';return}tray.innerHTML=unlocked.map(s=>{const preview=skillPreview(p,s);const detail=`${s.energy}⚡ • ${skillUiLabel(p,s,preview)}`;return `<button class="battleSkill ${p.energy>=s.energy?'ready':''}" data-battle-skill="${s.id}"><b>${s.icon} ${s.name}</b><span>${detail}</span></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(b=>b.onclick=()=>doAction(b.dataset.battleSkill));}
+function renderParty(){const arr=[...state.players].sort((a,b)=>b.xp-a.xp);$('leaderboard').innerHTML=arr.map((p,i)=>`<div class="leaderRow"><span>${i===0?'🏆 ':''}${(classes[p.classId]||classes.Vanguard).icon} ${esc(p.name)} <span class="badge">Lv ${p.level}</span> <span class="badge">${esc((classes[p.classId]||classes.Vanguard).name)}</span>${p.subclassId?` <span class="badge">${esc(subclassById[p.subclassId].name)}</span>`:''}</span><b>${p.xp} XP</b></div>`).join('')}
+function updateReward(p){let n=p.level+1;let pts=skillPointsForLevel(n);$('nextReward').innerHTML=`<b>Level ${n}</b><br>+${pts} skill point${pts>1?'s':''}<br><span class="muted">Subclass unlocks at Level 5. Class bonuses stack with your skill tree.</span>`}
+function unlockSkill(id){if(!isHost&&ws?.readyState===WebSocket.OPEN){sendWs({type:'unlock',id,playerId:myId});return}doUnlock(myId,id)}
+function doUnlock(pid,id){let p=state.players.find(x=>x.id===pid);let s=allSkills.find(x=>x.id===id);if(!p||!s||s.classId!==p.classId||p.skills.includes(id)||p.skillPoints<s.cost)return;const tree=classSkillTrees[p.classId];let arr=tree.core;let branchName=null;for(const [subId,list] of Object.entries(tree.branches||{})){if(list.some(x=>x.id===id)){arr=list;branchName=subId;break}}let idx=arr.findIndex(x=>x.id===id);if(branchName&&p.subclassId!==branchName){toast('Choose this subclass to unlock its skill tree.');return}let prevReq=branchName?null:(s.requiresPrev===true?arr[idx-1]:null);if(prevReq&&!p.skills.includes(prevReq.id)){toast('Unlock the previous skill first.');return}let coreReq=branchName?null:(s.requiresCore?tree.core[s.requiresCore-1]:null);if(coreReq&&!p.skills.includes(coreReq.id)){toast('Unlock '+coreReq.name+' first.');return}p.skillPoints-=s.cost;p.skills.push(id);let cat=s.cat||'Productivity';p.stats[cat]=(p.stats[cat]||0)+1;addLog('✨ '+p.name+' unlocked '+s.name+' in the '+classes[p.classId].name+' tree!');sync();renderAll();toast(s.name+' unlocked')}
+function completeQuest(id){if(!isHost&&ws?.readyState===WebSocket.OPEN){sendWs({type:'quest',id,playerId:myId});return}doCompleteQuest(myId,id)}
+function doCompleteQuest(pid,id){
+ let p=state.players.find(x=>x.id===pid);let q=p?.quests.find(x=>x.id===id);
+ if(!p||!q||q.done||state.ended)return;
+ if(state.started&&!canAct(p)){if(pid===myId)toast(state.turnPhase==='boss'?'The boss is attacking. Wait for the next round.':'You already acted this round. Wait for the other heroes.');return}
+ q.done=true;
+ p.stats=p.stats||{Cooking:0,Cleaning:0,Studying:0,Health:0,Productivity:0};
+ p.stats[q.category]=(p.stats[q.category]||0)+1;
+ let energyGain=q.energy;if(p.stats?.Cooking)energyGain+=Math.floor(p.stats.Cooking/5);
+ if(p.classId==='Tactician'&&p.subclassId==='battlechemist')energyGain=Math.ceil(energyGain*1.15);
+ p.energy=Math.min(maxEnergy(p),p.energy+energyGain);
+ p.hunterReady=p.classId==='Ranger';
+ let gained=q.xp;
+ if(p.classId==='Arcanist'&&p.subclassId==='scholar'&&q.category==='Studying')gained=Math.round(gained*1.10);
+ if(p.classId==='Mystic')gained=Math.round(gained*1.05);
+ let completed=p.quests.filter(x=>x.done).length;
+ if(completed===4)gained+=20;if(completed===8)gained+=40;if(completed===12)gained+=100;
+ let lv=addXp(p,gained);
+ addLog('📜 '+p.name+' completed '+q.title+' and gained '+gained+' XP'+(state.started?' — their turn is spent.':'')+'.');
+ if(lv){addLog('⬆️ '+p.name+' reached level '+p.level+'!');if(pid===myId)showLevelUp(p,lv)}
+ if(state.started){state.actedIds=Array.from(new Set([...(state.actedIds||[]),p.id]));if(remainingAttackers().length===0){bossTurn();return}}
+ sync();renderAll()
+}
+function showLevelUp(p,count){$('levelNumber').textContent=p.level;const subclassMsg=p.level>=5&&!p.subclassId?' 🎯 Subclass unlocked — choose Beastkeeper or Shadowstalker. You do NOT need to complete the Ranger core tree.':'';$('levelUpText').textContent='You gained '+count+' level'+(count>1?'s':'')+' and '+skillPointsForLevel(p.level)+' skill points at this level.'+subclassMsg;$('levelUp').classList.remove('hidden');if(p.level>=5&&!p.subclassId){setTimeout(()=>{if(me()===p&&!p.subclassId)openSubclassModal()},350)}}
+function livingPlayers(){return state.players.filter(p=>Number(p.hp)>0)}
+function currentPlayer(){return state.players[state.turnIndex]}
+function remainingAttackers(){return livingPlayers().filter(p=>!(state.actedIds||[]).includes(p.id))}
+function turnText(){
+  if(!state||!state.started)return 'Waiting for battle…';
+  if(state.ended)return 'Battle over';
+  if(state.turnPhase==='boss')return '👹 Boss Turn — The party acted!';
+  const left=remainingAttackers();
+  if(!left.length)return '👹 Boss Turn';
+  if(state.actedIds?.includes(myId))return '⏳ You acted — waiting for the rest of the party…';
+  return '⚔️ All heroes attack! Your turn to act.';
+}
+function bossPhaseForHp(){
+  const ratio=state.maxBoss>0?state.boss/state.maxBoss:1;
+  if(ratio<=1/3)return 3;
+  if(ratio<=0.5)return 2;
+  return 1;
+}
+function updateBossPhase(){
+  const next=bossPhaseForHp();
+  const current=Number(state.bossPhase)||1;
+  if(next>current){
+    state.bossPhase=next;
+    const boss=bosses[state.bossId]||bosses.chaos;
+    if(next===2){
+      state.bossBuff=Math.max(state.bossBuff||1,1.25);
+      addLog('🔥 PHASE II: '+boss.name+' has reached 50% HP and entered an enraged phase! New attacks unlocked.');
+    }else if(next===3){
+      state.bossBuff=Math.max(state.bossBuff||1,1.5);
+      addLog('☠️ PHASE III: '+boss.name+' is below one-third HP and enters its final phase! Its deadliest attacks are unleashed.');
+    }
+    return true;
+  }
+  return false;
+}
+function phaseMovesForBoss(boss){
+  const phase=Number(state.bossPhase)||1;
+  if(phase>=3 && boss.phase3Moves?.length)return [...boss.moves,...boss.phase2Moves||[],...boss.phase3Moves];
+  if(phase>=2 && boss.phase2Moves?.length)return [...boss.moves,...boss.phase2Moves];
+  return boss.moves;
+}
+function bossTurn(){
+  if(state.ended)return;
+  const boss=bosses[state.bossId]||bosses.chaos;
+  const alive=livingPlayers();
+  if(!alive.length){state.ended=true;addLog('☠️ The entire party was defeated.');sync();renderAll();finish();return}
+  state.turnPhase='boss';
+  const movePool=phaseMovesForBoss(boss); const move=movePool[Math.floor(Math.random()*movePool.length)]; const phaseMultiplier=(Number(state.bossPhase)||1)===3?1.2:((Number(state.bossPhase)||1)===2?1.1:1);
+  const taunter=alive.find(x=>x.taunt); const pickTarget=()=>taunter||alive[Math.floor(Math.random()*alive.length)];
+  let text='';
+  if(move.kind==='heal'){
+    const before=state.boss;state.boss=Math.min(boss.maxHp,state.boss+(move.heal||0));text='💚 '+boss.name+' used '+move.icon+' '+move.name+' and healed '+(state.boss-before)+' HP.';
+  }else if(move.kind==='buff'){
+    state.bossBuff=Math.min(2.5,(state.bossBuff||1)+0.35);text='😈 '+boss.name+' used '+move.icon+' '+move.name+'. Its next attack is empowered!';
+  }else if(move.kind==='aoe'){
+    const dmg=Math.round(move.damage*(state.bossBuff||1)*phaseMultiplier);state.bossBuff=1;
+    const reports=[];alive.forEach(p=>{reports.push({p,r:incomingDamage(p,dmg,true)});});
+    const avg=Math.round(reports.reduce((a,x)=>a+x.r.dealt,0)/Math.max(1,reports.length));
+    text='🔥 '+boss.name+' used '+move.icon+' '+move.name+' for '+dmg+' base damage to the whole party. Defense reduced the average hit to '+avg+'.';
+  }else if(move.kind==='drain'){
+    const target=pickTarget();let dmg=Math.round(move.damage*(state.bossBuff||1)*phaseMultiplier);state.bossBuff=1;const r=incomingDamage(target,dmg,true);target.energy=Math.max(0,(Number(target.energy)||0)-12);text='🌀 '+boss.name+' used '+move.icon+' '+move.name+' on '+target.name+' for '+r.dealt+' damage after '+r.defense+'% defense'+(r.blocked?' and '+r.blocked+' shield blocked.':'')+' and drained 12⚡.';
+  }else if(move.kind==='double'){
+    const target=pickTarget();let dmg=Math.round(move.damage*(state.bossBuff||1)*phaseMultiplier);state.bossBuff=1;let total=0,blockedTotal=0;for(let i=0;i<2&&target.hp>0;i++){const r=incomingDamage(target,dmg,true);total+=r.dealt;blockedTotal+=r.blocked;}text='⚡ '+boss.name+' used '+move.icon+' '+move.name+' on '+target.name+' for '+total+' total damage after '+defenseFor(target)+'% defense'+(blockedTotal?' and '+blockedTotal+' shield blocked.':'')+'.';
+  }else{
+    const target=pickTarget();const dmg=Math.round(move.damage*(state.bossBuff||1)*phaseMultiplier);state.bossBuff=1;const r=incomingDamage(target,dmg,true);text='💥 '+boss.name+' used '+move.icon+' '+move.name+' on '+target.name+' for '+r.dealt+' damage after '+r.defense+'% defense'+(r.blocked?' and '+r.blocked+' shield blocked.':'')+'.';
+  }
+  state.lastBossMove=text;addLog(text);
+  if(!livingPlayers().length){state.ended=true;addLog('☠️ The party was defeated by '+boss.name+'.');sync();renderAll();finish();return}
+  alive.forEach(x=>{x.taunt=false;x.tempDefense=0;x.counterReady=false;x.intercept=false});state.actedIds=[];
+  state.turnPhase='player';
+  state.round++;
+  sync();renderAll();
+}
+function canAct(p){
+  return p&&state.started&&!state.ended&&state.turnPhase==='player'&&Number(p.hp)>0&&!((state.actedIds||[]).includes(p.id));
+}
+function attack(pid,kind){
+ let p=state.players.find(x=>x.id===pid);if(!p||state.ended)return;ensurePlayer(p);
+ if(!canAct(p)){if(pid===myId)toast(state.turnPhase==='boss'?'The boss is attacking. Wait for the next round.':'You already acted this round. Wait for the other heroes.');return}
+ let dmg=0;
+ if(kind==='skip'){addLog('⏭️ '+p.name+' skipped their turn (0⚡).');}
+ else if(kind==='classAbility'){
+  const c=p.classId, ability=(classes[c]||classes.Vanguard).ability, cost=ability.cost;
+  if(p.abilityUsedRound===state.round){toast(ability.name+' can only be used once per round.');return}
+  const energy=Number(p.energy)||0;if(energy<cost){toast('Not enough energy for '+ability.name+'.');return}p.energy=energy-cost;p.abilityUsedRound=state.round;
+  if(c==='Vanguard'){
+    p.taunt=true;p.guardShield=45+(p.subclassId==='warden'?15:0);addLog('🛡️ '+p.name+' used Taunt: '+p.guardShield+' shield and the boss is forced to target them next turn.');
+  }else if(c==='Arcanist'){
+    p.overcharge=true;addLog('💠 '+p.name+' used Overcharge: next damaging attack deals +35% damage.');
+  }else if(c==='Ranger'){
+    p.preyMarked=true;addLog('🎯 '+p.name+' marked the boss: next damaging attack is a guaranteed critical for +40% damage.');
+  }else if(c==='Tactician'){
+    state.partyDamageBuff=1.2;state.partyDamageBuffRound=state.round;state.players.filter(x=>Number(x.hp)>0).forEach(x=>x.energy=Math.min(maxEnergy(x),(Number(x.energy)||0)+8));addLog('📯 '+p.name+' used Command: the whole party gains +20% damage this round and 8⚡.');
+  }else if(c==='Mystic'){
+    const allies=livingPlayers().sort((a,b)=>(a.hp/a.maxHp)-(b.hp/b.maxHp));const target=allies[0];const heal=Math.round(target.maxHp*(p.subclassId==='luminary'?.55:.35));const before=target.hp;target.hp=Math.min(target.maxHp,target.hp+heal);target.guardShield=(target.guardShield||0)+20;addLog('💚 '+p.name+' healed '+target.name+' for '+(target.hp-before)+' HP and gave them 20 shield.');
+  }else if(c==='Artificer'){
+    const rawShield=30+(p.subclassId==='curator'?10:0);const effectiveShield=Math.round(rawShield*1.2);livingPlayers().forEach(x=>x.guardShield=(x.guardShield||0)+effectiveShield);addLog('🛠️ '+p.name+' deployed a Barrier Array: every living ally gained '+effectiveShield+' shield.');
+  }
+ }else if(kind==='basic'){
+  const cost=8,currentEnergy=Number(p.energy)||0;if(currentEnergy<cost){toast(`Not enough energy. You have ${currentEnergy}⚡ and Strike costs ${cost}⚡.`);return}p.energy=currentEnergy-cost;dmg=35+(p.classId==='Vanguard'?15:0)+(p.classId==='Tactician'&&p.subclassId==='duelist'?25:0);if(p.classId==='Arcanist')dmg=Math.round(dmg*1.1);if(p.classId==='Ranger')dmg=Math.round(dmg*1.12);if(p.classId==='Mystic')dmg=Math.round(dmg*.85);if(p.classId==='Artificer')dmg=Math.round(dmg*.95);if(p.overcharge){dmg=Math.round(dmg*1.35);p.overcharge=false;addLog('💠 '+p.name+' consumed Overcharge!');}if(p.preyMarked){dmg=Math.round(dmg*1.4*1.6);p.preyMarked=false;addLog('🎯 '+p.name+' landed a guaranteed critical on Marked Prey!');}if(p.markPower){dmg=Math.round(dmg*(1+p.markPower/100));p.markPower=0;}if(p.classId==='Ranger'&&p.subclassId==='shadowstalker'&&Math.random()<.2)dmg=Math.round(dmg*1.6);if(p.classId==='Ranger'&&p.hunterReady){dmg+=35;p.hunterReady=false;addLog('🏹 '+p.name+' triggered Hunter’s Rhythm!')}if(p.classId==='Vanguard'&&p.subclassId==='berserker'&&state.boss<=state.maxBoss*.4)dmg=Math.round(dmg*1.3);if(state.partyDamageBuffRound===state.round)dmg=Math.round(dmg*state.partyDamageBuff);state.boss=Math.max(0,state.boss-dmg);addLog('⚔️ '+p.name+' used Strike for '+dmg+' damage.');
+ }else if(kind==='guard'){
+  let gain=8+(p.classId==='Vanguard'?4:0);p.energy=Math.min(maxEnergy(p),(Number(p.energy)||0)+gain);p.guardBuff=p.classId==='Vanguard'&&p.subclassId==='warden';p.guardShield=20+(p.classId==='Vanguard'?15:0);addLog('🛡️ '+p.name+' guarded, restored '+gain+'⚡, and gained '+p.guardShield+' shield.');
+ }else if(kind==='focus'){
+  if(p.focusTurn===state.round){toast('Focus can only be used once per round.');return}let gain=20+(p.classId==='Tactician'?10:0);p.focusTurn=state.round;p.energy=Math.min(maxEnergy(p),(Number(p.energy)||0)+gain);if(p.classId==='Mystic'&&p.subclassId==='oracle'&&!p.oracleUsed){dmg=60;p.oracleUsed=true;state.boss=Math.max(0,state.boss-dmg);addLog('🔮 '+p.name+' read the future and dealt 60 damage with Focus.')}else addLog('✨ '+p.name+' focused and recovered '+gain+' energy.');
+ }else{
+  let sk=allSkills.find(x=>x.id===kind);if(!sk||!p.skills.includes(kind)){toast('Unlock that skill first.');return}
+  let cost=Number(sk.energy);if(p.classId==='Arcanist')cost=Math.max(1,Math.ceil(cost*.88));if(p.classId==='Artificer'&&p.firstSkillReady)cost=Math.max(1,cost-5);
+  const currentEnergy=Number(p.energy)||0;if(currentEnergy<cost){toast(`Not enough energy. You have ${currentEnergy}⚡ and ${sk.name} costs ${cost}⚡.`);return}
+  p.energy=currentEnergy-cost;const e=sk.effect||{};let msg='✨ '+p.name+' used '+sk.name+'.';
+  const living=livingPlayers();const lowest=[...living].sort((a,b)=>(a.hp/a.maxHp)-(b.hp/b.maxHp))[0]||p;
+  const effectPower=(value)=>{let amount=Number(value)||0;if(p.nextSkillPower){amount=Math.round(amount*(1+Number(p.nextSkillPower)/100));}return amount};
+  const shield=(target,n)=>{let amount=effectPower(n);if(p.classId==='Artificer')amount=Math.round(amount*1.2);if(p.classId==='Artificer'&&p.subclassId==='curator'&&sk.cat==='Cleaning')amount=Math.round(amount*1.15);target.guardShield=(Number(target.guardShield)||0)+amount;return amount};
+  const heal=(target,pct)=>{const boosted=effectPower(pct);const n=Math.round(target.maxHp*(boosted/100));const before=target.hp;target.hp=Math.min(target.maxHp,target.hp+n);return target.hp-before};
+  switch(e.type){
+   case 'ranger_damage': {
+    let hit=Number(e.amount)||50;
+    hit=Math.round(hit*(1+(Number(p.stats?.[sk.cat||'Productivity'])||0)*.03));
+    hit=Math.round(hit*1.12);
+    if(p.stats?.Productivity)hit=Math.round(hit*(1+p.stats.Productivity*.01));
+    if(e.companion) hit+=Number(e.companion)||0;
+    if(e.mark && p.preyMarked) hit=Math.round(hit*1.4*1.6);
+    else if(p.preyMarked){hit=Math.round(hit*1.4*1.6)}
+    let critChance=Math.min(100,Number(e.crit)||0)+(p.subclassId==='shadowstalker'?10:0);
+    if(p.preyMarked) critChance=100;
+    if(Math.random()*100<critChance) hit=Math.round(hit*1.5);
+    if(state.boss<=state.maxBoss*.25 && p.subclassId==='shadowstalker') hit=Math.round(hit*1.25);
+    if(state.partyDamageBuffRound===state.round) hit=Math.round(hit*state.partyDamageBuff);
+    state.boss=Math.max(0,state.boss-hit);
+    if(p.preyMarked){p.preyMarked=false;addLog('🎯 '+p.name+' consumed Mark Prey for a critical strike!')}
+    if(e.prime) p.hunterReady=true;
+    if(e.weak) state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-Number(e.weak)/100));
+    if(e.energy) p.energy=Math.min(maxEnergy(p),p.energy+Number(e.energy));if(p.markPower){hit=Math.round(hit*(1+p.markPower/100));p.markPower=0;}
+    if(e.defense) p.tempDefense=(p.tempDefense||0)+Number(e.defense);
+    msg+=' 💥 '+hit+' damage.';
+    break;
+   }
+   case 'ranger_execute': {
+    let hit=Number(e.amount)||300;
+    hit=Math.round(hit*(1+(Number(p.stats?.[sk.cat||'Productivity'])||0)*.03));
+    hit=Math.round(hit*1.12);
+    if(p.stats?.Productivity)hit=Math.round(hit*(1+p.stats.Productivity*.01));
+    let critChance=Math.min(100,Number(e.crit)||0)+(p.subclassId==='shadowstalker'?10:0);
+    if(p.preyMarked) critChance=100;
+    if(Math.random()*100<critChance) hit=Math.round(hit*1.5);
+    if(state.boss<=state.maxBoss*(Number(e.execute)||25)/100) hit=Math.round(hit*1.45);
+    if(state.partyDamageBuffRound===state.round) hit=Math.round(hit*state.partyDamageBuff);
+    state.boss=Math.max(0,state.boss-hit);
+    p.preyMarked=false;
+    msg+=' ☠️ '+hit+' damage.';
+    break;
+   }
+   case 'shield_self': shield(p,e.amount||30);p.tempDefense=(p.tempDefense||0)+(e.defense||0);break;
+   case 'shield_lowest': shield(lowest,e.amount||30);break;
+   case 'party_shield': living.forEach(x=>shield(x,e.amount||25)); if(e.bossWeak) state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-Number(e.bossWeak)/100)); break;
+   case 'party_shield_energy': living.forEach(x=>{shield(x,e.shield||20);x.energy=Math.min(maxEnergy(x),(Number(x.energy)||0)+(e.energy||5))});break;
+   case 'party_repair': living.forEach(x=>{shield(x,e.shield||20);x.energy=Math.min(maxEnergy(x),(Number(x.energy)||0)+(e.energy||5))});break;
+   case 'party_shield_defense': living.forEach(x=>{shield(x,e.shield||20);x.tempDefense=(x.tempDefense||0)+(e.defense||10)});break;
+   case 'party_heal_shield': living.forEach(x=>{heal(x,e.heal||10);shield(x,e.shield||20)});break;
+   case 'party_heal': living.forEach(x=>heal(x,e.heal||10));break;
+   case 'party_heal_defense': living.forEach(x=>{heal(x,e.heal||10);x.tempDefense=(x.tempDefense||0)+(e.defense||10)});break;
+   case 'heal_lowest': msg+=' Healed '+lowest.name+' for '+heal(lowest,e.heal||20)+' HP.';break;
+   case 'heal_lowest_shield': {const h=heal(lowest,e.heal||20);shield(lowest,e.shield||20);msg+=' Healed '+lowest.name+' for '+h+' HP and added shield.';break;}
+   case 'energy_self': p.energy=Math.min(maxEnergy(p),p.energy+(e.amount||18));break;
+   case 'party_energy': living.forEach(x=>x.energy=Math.min(maxEnergy(x),x.energy+(e.amount||8)));break;
+   case 'energy_self_ally': {p.energy=Math.min(maxEnergy(p),p.energy+(e.amount||18));const ally=living.find(x=>x.id!==p.id)||p;ally.energy=Math.min(maxEnergy(ally),ally.energy+(e.amount||18));break;}
+   case 'energy_shield': p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||8));shield(p,e.shield||20);break;
+   case 'energy_shield_ally': {const ally=living.find(x=>x.id!==p.id)||p;ally.energy=Math.min(maxEnergy(ally),ally.energy+(e.energy||8));shield(ally,e.shield||15);break;}
+   case 'energy_shield_lowest': lowest.energy=Math.min(maxEnergy(lowest),lowest.energy+(e.energy||8));shield(lowest,e.shield||20);break;
+   case 'heal_lowest_energy': {const h=heal(lowest,e.heal||15);lowest.energy=Math.min(maxEnergy(lowest),lowest.energy+(e.energy||8));msg+=' Healed '+lowest.name+' for '+h+' HP.';break;}
+   case 'party_energy_defense': living.forEach(x=>{x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||6));x.tempDefense=(x.tempDefense||0)+(e.defense||8)});break;
+   case 'party_buff': state.partyDamageBuff=1+(e.power||15)/100;state.partyDamageBuffRound=state.round; if(e.bossWeak) state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-Number(e.bossWeak)/100)); break;
+   case 'party_energy_buff': living.forEach(x=>x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||6)));state.partyDamageBuff=1+(e.power||15)/100;state.partyDamageBuffRound=state.round;break;
+   case 'party_defense_buff': living.forEach(x=>x.tempDefense=(x.tempDefense||0)+(e.defense||15));state.partyDamageBuff=1+(e.power||15)/100;state.partyDamageBuffRound=state.round;break;
+   case 'party_defense': living.forEach(x=>x.tempDefense=(x.tempDefense||0)+(e.amount||15));break;
+   case 'self_defense': p.tempDefense=(p.tempDefense||0)+(e.amount||20);break;
+   case 'buff_next': p.nextSkillPower=(p.nextSkillPower||0)+(e.power||20);break;
+   case 'taunt': p.taunt=true;shield(p,e.shield||25);p.tempDefense=(p.tempDefense||0)+20;break;
+   case 'intercept': p.intercept=true;shield(lowest,e.amount||25);break;
+   case 'bodyguard': {const ally=living.find(x=>x.id!==p.id)||p;shield(ally,e.amount||20);ally.tempDefense=(ally.tempDefense||0)+(e.defense||20);break;}
+   case 'guardian_oath': living.forEach(x=>{shield(x,e.shield||25);x.tempDefense=(x.tempDefense||0)+(e.defense||15)});break;
+   case 'bulwark': living.forEach(x=>{shield(x,e.shield||40);x.tempDefense=(x.tempDefense||0)+(e.defense||20)});p.taunt=true;break;
+   case 'blood_guard': shield(p,e.shield||45);p.tempDefense=(p.tempDefense||0)+Math.round((1-p.hp/p.maxHp)*20);break;
+   case 'boss_weak_party': {
+    state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.bossWeak||20)/100));
+    living.forEach(x=>x.tempDefense=(x.tempDefense||0)+(e.partyDefense||10));
+    break;
+   }
+   case 'burn_burst': {
+    let hit=Number(e.amount)||100;
+    if(p.burnReady){hit=Math.round(hit*1.75);p.burnReady=false;msg+=' Burn detonated!';}
+    if(state.partyDamageBuffRound===state.round)hit=Math.round(hit*state.partyDamageBuff);
+    if(p.stats?.Productivity)hit=Math.round(hit*(1+p.stats.Productivity*.01));
+    state.boss=Math.max(0,state.boss-hit);
+    msg+=' 💥 '+hit+' damage.';
+    break;
+   }
+   case 'cleanse_lowest': {
+    lowest.energy=Math.min(maxEnergy(lowest),lowest.energy+(e.energy||8));
+    lowest.tempDefense=(lowest.tempDefense||0)+(e.defense||12);
+    break;
+   }
+   case 'guardian_spirit': {
+    shield(lowest,e.shield||55);
+    lowest.tempDefense=(lowest.tempDefense||0)+20;
+    lowest.guardianSpirit=true;
+    break;
+   }
+   case 'last_stand': {
+    const hpRatio=Number(p.hp||0)/Math.max(1,Number(p.maxHp||1));
+    if(hpRatio>0.5){
+      p.energy=Math.min(maxEnergy(p),Number(p.energy||0)+Number(sk.energy||0));
+      state.actedIds=(state.actedIds||[]).filter(id=>id!==p.id);
+      toast('Last Stand can only be used at 50% HP or lower.');
+      return;
+    }
+    const woundedBonus=Math.max(0,Math.round((1-hpRatio)*30));
+    shield(p,(e.shield||60)+woundedBonus);
+    p.tempDefense=(p.tempDefense||0)+25;
+    p.lastStandReady=true;
+    msg+=' Fortified you with a '+((e.shield||60)+woundedBonus)+' shield and +25% temporary Defense.';
+    break;
+   }
+   case 'war_roar': shield(p,e.shield||25);state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.bossWeak||10)/100));living.forEach(x=>x.tempDefense=(x.tempDefense||0)+5);break;
+   case 'counter': p.counterDamage=e.damage||80;p.counterReady=true;p.tempDefense=(p.tempDefense||0)+(e.defense||10);break;
+   case 'endure': p.tempDefense=(p.tempDefense||0)+(e.defense||20);p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||10));break;
+   case 'boss_weak': state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.amount||e.power||15)/100));break;
+   case 'burn': state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.amount||25)/100));p.burnReady=true;break;
+   case 'mark': state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.power||15)/100));p.markPower=e.power||20;break;
+   case 'boss_weak_energy': state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.weak||30)/100));p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||8));break;
+   case 'protect_lowest': lowest.tempDefense=(lowest.tempDefense||0)+(e.defense||25);break;
+   case 'omniscience': living.forEach(x=>{x.tempDefense=(x.tempDefense||0)+(e.defense||15);x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||8))});state.partyDamageBuff=1+(e.power||20)/100;state.partyDamageBuffRound=state.round;break;
+   case 'grand_tactics': living.forEach(x=>{x.tempDefense=(x.tempDefense||0)+(e.defense||20);x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||10))});state.partyDamageBuff=1+(e.power||20)/100;state.partyDamageBuffRound=state.round;break;
+   case 'lab': living.forEach(x=>x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||10)));state.partyDamageBuff=1+(e.power||25)/100;state.partyDamageBuffRound=state.round;break;
+   case 'drone': state.bossBuff=Math.max(.5,(state.bossBuff||1)*(1-(e.bossWeak||15)/100));p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||8));break;
+   case 'factory': living.forEach(x=>{shield(x,e.shield||30);x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||8));x.tempDefense=(x.tempDefense||0)+(e.defense||12)});break;
+   case 'masterpiece': living.forEach(x=>{heal(x,e.heal||20);shield(x,e.shield||35);x.energy=Math.min(maxEnergy(x),x.energy+(e.energy||8));x.tempDefense=(x.tempDefense||0)+(e.defense||15)});break;
+   case 'miracle': living.forEach(x=>{heal(x,e.heal||25);shield(x,e.shield||30)});break;
+   case 'apex': shield(p,e.shield||70);p.tempDefense=(p.tempDefense||0)+(e.defense||25);p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||12));break;
+   case 'revenge_guard': shield(p,e.shield||45);p.tempDefense=(p.tempDefense||0)+(e.defense||15);break;
+   case 'predator': p.markPower=e.power||25;p.tempDefense=(p.tempDefense||0)+(e.defense||15);break;
+   case 'party_shield_energy_trade': {const trade=Math.min(Number(p.energy)||0,Number(e.energyCost)||6);p.energy-=trade;living.forEach(x=>shield(x,e.shield||35));living.forEach(x=>x.energy=Math.min(maxEnergy(x),(Number(x.energy)||0)+Number(e.energyGain||3)));break;}
+   case 'shield_energy': p.energy=Math.min(maxEnergy(p),p.energy+(e.energy||8));shield(p,e.shield||20);break;
+   case 'shield_lowest': shield(lowest,e.amount||30);break;
+   case 'shield_self': shield(p,e.amount||30);break;
+   default: break;
+  }
+  if(p.nextSkillPower){p.nextSkillPower=0}
+  if(p.classId==='Arcanist'&&p.overcharge){p.overcharge=false;p.energy=Math.min(maxEnergy(p),p.energy+8);addLog('💠 '+p.name+' consumed Overcharge and refunded 8⚡.');}
+  addLog(msg);
+  // Legacy damage skills, if any remain, still work.
+  if(Number(sk.dmg)>0){let bonus=1+(p.stats?.[sk.cat||'Productivity']||0)*.03;if(p.stats?.Productivity)bonus*=1+(p.stats.Productivity*.01);if(state.partyDamageBuffRound===state.round)bonus*=state.partyDamageBuff;if(p.classId==='Arcanist')bonus*=1.1;state.boss=Math.max(0,state.boss-Math.max(1,Math.round(Number(sk.dmg)*bonus)));}
+  if(p.classId==='Ranger'&&p.hunterReady){p.hunterReady=false}
+  if(p.classId==='Artificer'&&p.firstSkillReady)p.firstSkillReady=false;
+ }
+ state.actedIds=Array.from(new Set([...(state.actedIds||[]),p.id]));
+ updateBossPhase();
+ if(state.boss===0){state.ended=true;const boss=(bosses[state.bossId]||bosses.chaos);addLog('🏆 The party defeated '+boss.name+'!');awardBossRewards();sync();renderAll();finish();return}
+ const remaining=remainingAttackers();
+ if(remaining.length===0){bossTurn();return}
+ sync();renderAll();if(state.ended)finish()
+}
+function doAction(kind){if(!isHost&&ws?.readyState===WebSocket.OPEN){sendWs({type:'attack',kind,playerId:myId});return}attack(myId,kind)}
+function awardBossRewards(){
+  if(state.bossRewardClaimed)return;
+  const boss=bosses[state.bossId]||bosses.chaos;
+  const xp=Number(boss.rewardXp)||Math.max(100,Math.round(boss.maxHp*.14));
+  const energy=Number(boss.rewardEnergy)||Math.max(20,Math.round(boss.maxHp*.022));
+  state.bossRewardClaimed=true;
+  state.players.forEach(p=>{
+    const beforeLevel=p.level;
+    addXp(p,xp);
+    p.energy=Math.min(maxEnergy(p),(Number(p.energy)||0)+energy);
+    addLog('🎁 '+p.name+' earned '+xp+' XP and '+energy+'⚡ for defeating '+boss.name+'.');
+    if(p.level>beforeLevel) addLog('⬆️ '+p.name+' reached level '+p.level+' from the boss reward!');
+  });
+}
+function finish(){showScreen('result');const victory=state.boss===0;const boss=bosses[state.bossId]||bosses.chaos;const idx=bossIds.indexOf(state.bossId);const next=bossIds[idx+1];$('resultTitle').textContent=victory?'🏆 BOSS DEFEATED':'☠️ PARTY DEFEATED';let top=[...state.players].sort((a,b)=>b.xp-a.xp)[0];$('resultText').textContent=victory?`The party defeated ${boss.name}. ${top.name} led the party with ${top.xp} XP.`:`The party was defeated by ${boss.name} with ${state.boss} HP remaining. ${top.name} led the party with ${top.xp} XP.`;$('againBtn').textContent=victory?(next?'Next Boss: '+bosses[next].name.replace('THE ',''):'Back to Home'):'Back to Home';$('againBtn').disabled=!isHost&&victory;$('againBtn').title=!isHost&&victory?'The host advances the campaign.':''}
+function hostMessage(m){if(m.type==='hello'){if(state.started){return}if(!state.players.some(p=>p.id===m.id)){state.players.push(createPlayer(m.id,m.name,false,state.players.length+1));connections.get(m.connId)?.send({type:'state',state});renderLobby()}return}if(m.type==='quest')doCompleteQuest(m.playerId,m.id);if(m.type==='unlock')doUnlock(m.playerId,m.id);if(m.type==='avatar')doUpdateAvatar(m.playerId,m.icon,m.tone);if(m.type==='class')doSetClass(m.playerId,m.id);if(m.type==='subclass')doSetSubclass(m.playerId,m.id);if(m.type==='attack')attack(m.playerId,m.kind)}
+function updateBossPreview(){
+ const bs=$('bossSelect'); if(!bs)return;
+ const id=bs.value||state.bossId||bossIds[0]; const b=bosses[id]||bosses.chaos; const idx=Math.max(0,bossIds.indexOf(id))+1;
+ if($('bossPreviewImage')){$('bossPreviewImage').src=bossHeroPath(id);$('bossPreviewImage').alt=b.name+' boss artwork';}
+ if($('bossPreviewOrder'))$('bossPreviewOrder').textContent='BOSS '+idx+' / '+bossIds.length;
+ if($('bossPreviewName'))$('bossPreviewName').textContent=b.name;
+ if($('bossPreviewStats'))$('bossPreviewStats').textContent=b.maxHp.toLocaleString()+' HP • '+b.rewardXp+' XP • '+b.rewardEnergy+'⚡';
+ if($('bossPreviewDesc'))$('bossPreviewDesc').textContent=b.desc||b.subtitle;
+}
+function continueAfterBattle(){
+ if(!isHost)return;
+ if(state.boss!==0){leave();return}
+ const idx=bossIds.indexOf(state.bossId); const next=bossIds[idx+1];
+ if(!next){leave();return}
+ const b=bosses[next]; state.bossId=next; state.boss=b.maxHp; state.maxBoss=b.maxHp; state.started=false; state.ended=false; state.log=[]; state.turnIndex=0; state.round=1; state.turnPhase='player'; state.actedIds=[]; state.bossBuff=1; state.bossPhase=1; state.lastBossMove='Waiting for the party…'; state.bossRewardClaimed=false; sync(); renderLobby();
+}
+function renderLobby(){showScreen('lobby');$('roomCode').textContent=roomCode;const bs=$('bossSelect');if(bs){bs.innerHTML=bossIds.map(id=>`<option value="${id}">${bosses[id].emoji} ${bosses[id].name.replace('THE ','')} — ${bosses[id].maxHp.toLocaleString()} HP</option>`).join('');bs.value=state.bossId||'chaos';bs.disabled=!isHost;bs.onchange=()=>{if(isHost){state.bossId=bs.value;const b=bosses[bs.value];state.boss=b.maxHp;state.maxBoss=b.maxHp;updateBossPreview();sync()}}}$('shareLink').value=location.protocol==='file:'?'http://localhost:3000/?room='+roomCode:location.href;updateBossPreview();$('lobbyPlayers').innerHTML=state.players.map(p=>`<div class="lobbyClass"><div><div class="name">${p.host?'👑 ':''}${(classes[p.classId]||classes.Vanguard).icon} ${esc(p.name)}</div><div class="muted">${esc((classes[p.classId]||classes.Vanguard).name)} • ${esc((classes[p.classId]||classes.Vanguard).role)} ${p.subclassId?'• '+esc(subclassById[p.subclassId].name):'• Subclass unlocks at Lv 5'}</div></div><span class="badge">Lv ${p.level}</span></div>`).join('');let mep=me();$('lobbyClassArea').innerHTML=`<div class="lobbyClass"><div><b>Your Class</b><div class="muted">${mep.classId?classes[mep.classId].icon+' '+classes[mep.classId].name:'⚔️ No class selected yet'}</div></div><button type="button" id="lobbyChooseClass" class="classBtn" style="width:auto;margin:0">${mep.classReady?'Change Class':'Choose Class'}</button></div>`;$('lobbyChooseClass').disabled=!!state.started; $('lobbyChooseClass').textContent=state.started?'🔒 Class Locked':(mep.classReady?'Change Class':'Choose Class'); $('lobbyChooseClass').onclick=openClassModal;$('startBtn').style.display=isHost?'inline-block':'none';let ready=state.players.every(p=>p.classReady);$('startBtn').disabled=!ready;$('lobbyStatus').textContent=isHost?(ready?'Everyone has a class. Start the adventure when ready.':'Choose a class for every player before starting.'):'Choose your class, then wait for the host…'}
+function start(){if(!isHost)return;if(!state.players.every(p=>p.classReady)){toast('Every player must choose a class first.');return}const id=$('bossSelect')?.value||'chaos';const b=bosses[id]||bosses.chaos;state.bossId=id;state.boss=b.maxHp;state.maxBoss=b.maxHp;state.turnIndex=0;state.turnPhase='player';state.actedIds=[];state.round=1;state.ended=false;state.bossBuff=1;state.bossPhase=1;state.lastBossMove='The battle begins!';state.bossRewardClaimed=false;state.players.forEach(p=>{ensurePlayer(p);p.maxHp=100+p.level*5+(p.stats.Health||0)*8;p.hp=p.maxHp;p.guardShield=0;p.focusTurn=null;p.taunt=false;p.overcharge=false;p.preyMarked=false;p.commandRound=0;p.abilityUsedRound=0});state.started=true;addLog('⚔️ The party entered the '+b.name+' arena. '+state.players[0].name+' goes first.');sync();showScreen('app');renderAll()}
+function connectSocket(){
+  if(ws && (ws.readyState===WebSocket.OPEN||ws.readyState===WebSocket.CONNECTING)) return;
+  const socketUrl=location.protocol==='file:'?'ws://localhost:3000':(location.protocol==='https:'?'wss://':'ws://')+location.host;
+  ws=new WebSocket(socketUrl);
+  ws.onopen=()=>{
+    $('roomPill').textContent='🌐 Connecting • Room: '+roomCode;
+    if(isHost) sendWs({type:'host',room:roomCode});
+    else sendWs({type:'join',room:roomCode,id:myId,name:myName});
+  };
+  ws.onmessage=(ev)=>{
+    let m; try{m=JSON.parse(ev.data)}catch{return}
+    if(m.type==='host_ready'){history.replaceState(null,'','?room='+roomCode);$('roomPill').textContent='🌐 Online • Room: '+roomCode;renderLobby();return}
+    if(m.type==='joined'){ $('roomPill').textContent='🌐 Online • Room: '+roomCode; return }
+    if(m.type==='guest_message' && isHost){
+      let c=connections.get(m.connId);
+      if(!c){c={open:true,send:(x)=>sendWs({type:'state',state:x.state})};connections.set(m.connId,c)}
+      const msg=m.data||{}; msg.connId=m.connId; hostMessage(msg); return;
+    }
+    if(m.type==='state' && !isHost){
+      state=structuredClone(m.state);if(!state.bossId)state.bossId='chaos';if(!state.turnPhase)state.turnPhase='player';if(!Number.isFinite(state.turnIndex))state.turnIndex=0;if(!state.round)state.round=1;if(!state.bossPhase)state.bossPhase=1;if(!Array.isArray(state.actedIds))state.actedIds=[];if(state.bossRewardClaimed==null)state.bossRewardClaimed=false;state.players.forEach(ensurePlayer);
+      if(!state.started)renderLobby(); else {showScreen('app');renderAll()}
+      if(state.ended)finish();
+      return;
+    }
+    if(m.type==='error'){
+      $('roomPill').textContent='⚠️ '+(m.message||'Connection error');
+      toast(m.message||'Multiplayer connection error.');
+    }
+  };
+  ws.onclose=()=>{
+    if(roomCode){$('roomPill').textContent='⚠️ Disconnected • Room: '+roomCode;}
+  };
+  ws.onerror=()=>toast('Multiplayer connection failed. Make sure you opened the public https:// game URL.');
+}
+function create(){
+  if(location.protocol==='file:') toast('Local file mode: start the included server first, then open http://localhost:3000');
+  myName=(prompt('Your player name:')||'Player 1').slice(0,18);
+  roomCode=Math.random().toString(36).slice(2,8).toUpperCase(); myId='host-'+roomCode; isHost=true;
+  state=initial(); state.players=[createPlayer(myId,myName,true,1)];
+  connectSocket();
+}
+function join(codeFromUrl){
+  let code=(codeFromUrl||(prompt('Room code:')||'')).trim().toUpperCase(); if(!code)return;
+  myName=(prompt('Your player name:')||'Player').slice(0,18); roomCode=code; isHost=false; myId='guest-'+Math.random().toString(36).slice(2);
+  connectSocket();
+}
+
+function leave(){location.href=location.pathname}
+function setView(v){view=v;document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));['viewGame','viewQuests','viewSkills','viewHero','viewParty'].forEach(id=>$(id).classList.toggle('hidden',id!==('view'+v.charAt(0).toUpperCase()+v.slice(1))));if(v==='game')$('viewGame').classList.remove('hidden');if(v==='quests')$('viewQuests').classList.remove('hidden');if(v==='skills')$('viewSkills').classList.remove('hidden');if(v==='party')$('viewParty').classList.remove('hidden')}
+$('createBtn').onclick=create;$('joinBtn').onclick=join;$('startBtn').onclick=start;$('leaveBtn').onclick=leave;$('againBtn').onclick=continueAfterBattle;$('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);toast('Join link copied!')}catch{prompt('Copy this link',location.href)}};$('closeLevel').onclick=()=>$('levelUp').classList.add('hidden');$('editAvatar').onclick=openAvatar;$('closeAvatar').onclick=closeAvatar;$('cancelAvatar').onclick=closeAvatar;$('saveAvatar').onclick=saveAvatar;$('changeClass').onclick=openClassModal;$('heroChangeClass').onclick=openClassModal;$('heroChooseSubclass').onclick=openSubclassModal;$('closeClass').onclick=(e)=>{e.preventDefault();e.stopPropagation();closeClassModal()};$('cancelClass').onclick=(e)=>{e.preventDefault();e.stopPropagation();closeClassModal()};$('saveClass').onclick=(e)=>{e.preventDefault();e.stopPropagation();saveClassChoice()};$('closeSubclass').onclick=closeSubclassModal;$('cancelSubclass').onclick=closeSubclassModal;$('saveSubclass').onclick=saveSubclassChoice;document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));$('basicAttack').onclick=()=>doAction('basic');$('classAbilityBtn').onclick=()=>doAction('classAbility');$('skipBtn').onclick=()=>doAction('skip');$('defendBtn').onclick=()=>doAction('guard');$('focusBtn').onclick=()=>doAction('focus');$('skillAttack').onclick=()=>{setView('skills');toast('Use an unlocked skill to attack the boss. Your energy is spent only when you attack.')};
+$('bossImage').addEventListener('error',()=>{$('bossImage').classList.add('hidden');$('dragonFallback').classList.remove('hidden')});
+const urlRoom=new URLSearchParams(location.search).get('room');if(urlRoom){setTimeout(()=>join(urlRoom),100)}
+})();
+</script></body></html>
