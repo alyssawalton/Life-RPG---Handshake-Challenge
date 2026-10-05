@@ -1,0 +1,15 @@
+{
+  "name": "life-rpg",
+  "version": "29.0.0",
+  "private": true,
+  "description": "Life RPG - reliable web-hosted multiplayer real-life RPG",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
